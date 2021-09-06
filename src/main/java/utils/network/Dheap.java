@@ -1,6 +1,7 @@
 package utils.network;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 import utils.exceptions.DoNotExecution;
 import utils.exceptions.InvalidArguments;
 
@@ -26,21 +27,31 @@ class Dheap {
     heapNum++;
   }
 
-  void shiftUp(final int vertexIndex, final double[] weight) throws InvalidArguments {
-    int heapIndex = heapIndexes[vertexIndex];
+  void shiftUp(final int vertexIndex, final double[] weight)
+      throws InvalidArguments, DoNotExecution {
+    if (vertexIndex < 0) {
+      throw new InvalidArguments("vertexIndex is less than 0");
+    }
 
-    if (heapIndex >= heapNum) {
+    if (vertexIndex >= heapNum) {
       throw new InvalidArguments(
           String.format(
+              "vertexIndex is more than or equal to heapNum (vertexIndex = %d, heapNum = %d)",
+              vertexIndex, heapNum));
+    }
+
+    int child = heapIndexes[vertexIndex];
+
+    if (child >= heapNum) {
+      throw new DoNotExecution(
+          String.format(
               "heapIndex is more than or equal to heap num (heapIndex = %d, heap num = %d)",
-              heapIndex, heapNum));
+              child, heapNum));
     }
 
     if (weight == null) {
       throw new InvalidArguments("weight is null");
     }
-
-    int child = heapIndex;
 
     while (child > 0) {
       int parent = (child - 1) / childrenNum;
@@ -48,10 +59,8 @@ class Dheap {
       int childVertexIndex = heap[child];
 
       if (weight[childVertexIndex] < weight[parentVertexIndex]) {
-        heapIndexes[parentVertexIndex] = childVertexIndex;
-        heapIndexes[childVertexIndex] = parentVertexIndex;
-
-        swap(child, parent);
+        swapHeapIndexes(childVertexIndex, parentVertexIndex);
+        swapHeap(child, parent);
         child = parent;
       } else {
         break;
@@ -65,13 +74,29 @@ class Dheap {
     }
 
     if (heapNum == 0) {
-        return;
+      return;
     }
 
-    heap[0] = heap[heapNum - 1];
-    heapNum--;
-    if (heapNum <= 1) {
-      return;
+    // if depth of d-heap is equal to 1, sort leaves.
+    // reason using select sort is following.
+    // - easy to implements
+    // - not too late because #leaves is few
+    if (heapNum <= childrenNum + 1) {
+      for (int i = 1; i < heapNum - 1; i++) {
+        int minHeapIndex = i + 1;
+        int minHeapVertexIndex = heap[minHeapIndex];
+        for (int j = i + 1; j < heapNum; j++) {
+          if (weight[minHeapVertexIndex] > weight[heap[j]]) {
+            minHeapIndex = j;
+            minHeapVertexIndex = heap[j];
+          }
+        }
+
+        if (weight[heap[i]] > weight[minHeapVertexIndex]) {
+          swapHeapIndexes(heap[i], minHeapVertexIndex);
+          swapHeap(i, minHeapIndex);
+        }
+      }
     }
 
     int parent = 0;
@@ -85,20 +110,17 @@ class Dheap {
       int childVertexIndex = heap[child];
 
       while (child - (parent * childrenNum + 1) < childrenNum && child < heapNum) {
-        if (weight[childVertexIndex] > weight[minWeightChildVertexIndex]) {
+        if (weight[childVertexIndex] < weight[minWeightChildVertexIndex]) {
           minWeightChild = child;
-          minWeightChildVertexIndex = heap[minWeightChild];
+          minWeightChildVertexIndex = childVertexIndex;
         }
 
-        child++;
+        childVertexIndex = heap[++child];
       }
 
       if (weight[minWeightChildVertexIndex] < weight[parentVertexIndex]) {
-        heapIndexes[parentVertexIndex] = minWeightChildVertexIndex;
-        heapIndexes[minWeightChildVertexIndex] = parentVertexIndex;
-
-        swap(minWeightChild, parent);
-
+        swapHeapIndexes(minWeightChildVertexIndex, parentVertexIndex);
+        swapHeap(minWeightChild, parent);
         parent = minWeightChild;
       } else {
         break;
@@ -106,20 +128,26 @@ class Dheap {
     }
   }
 
-  private void swap(final int child, final int parent) {
-    int vertexIndex = heap[parent];
-    heap[child] = heap[parent];
-    heap[parent] = vertexIndex;
+  private void swapHeap(final int heapIndex1, final int heapIndex2) {
+    int vertexIndex = heap[heapIndex1];
+    heap[heapIndex1] = heap[heapIndex2];
+    heap[heapIndex2] = vertexIndex;
   }
 
-  int pop() throws DoNotExecution {
+  private void swapHeapIndexes(final int vertexIndex1, final int vertexIndex2) {
+    int heapIndex = heapIndexes[vertexIndex1];
+    heapIndexes[vertexIndex1] = heapIndexes[vertexIndex2];
+    heapIndexes[vertexIndex2] = heapIndex;
+  }
+
+  int pop() throws NoSuchElementException {
     if (heapNum == 0) {
-      throw new DoNotExecution("will pop heap first element when heap num is 0");
+      throw new NoSuchElementException("will pop heap first element when heap num is 0");
     }
 
     int root = heap[0];
-    heap[0] = heap[heapNum - 1];
-    heapNum--;
+    heap[0] = heap[--heapNum];
+    heapIndexes[heap[0]] = 0;
 
     return root;
   }
@@ -138,5 +166,17 @@ class Dheap {
 
   void setHeapIndexesTo0(final int index) {
     heapIndexes[index] = 0;
+  }
+
+  int getChildrenNum() {
+    return childrenNum;
+  }
+
+  int[] getHeap() {
+    return heap;
+  }
+
+  int[] getHeapIndexes() {
+    return heapIndexes;
   }
 }
