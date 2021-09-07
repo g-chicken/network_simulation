@@ -64,7 +64,16 @@ public class Dijkstra {
       linkWeights[i] = l.getWeight();
     }
 
-    setAdjacencyList();
+    first = new int[vertexNum];
+    for (int i = 0; i < network.getVertexNum(); i++) {
+      first[i] = network.getFirst()[i];
+    }
+
+    adjList = new int[linkNum];
+    for (int i = 0; i < network.getLinkNum(); i++) {
+      adjList[i] = network.getAdjList()[i];
+    }
+
     initialize();
   }
 
@@ -135,5 +144,33 @@ public class Dijkstra {
     dheap = new Dheap((vertexNum + linkNum - 1) / vertexNum, vertexNum);
 
     Arrays.fill(path, -1);
+  }
+
+  int getVertexNum() {
+    return vertexNum;
+  }
+
+  int getLinkNum() {
+    return linkNum;
+  }
+
+  int[] getHeads() {
+    return heads;
+  }
+
+  int[] getTails() {
+    return tails;
+  }
+
+  double[] getLinkWeights() {
+    return linkWeights;
+  }
+
+  int[] getFirst() {
+    return first;
+  }
+
+  int[] getAdjList() {
+    return adjList;
   }
 }

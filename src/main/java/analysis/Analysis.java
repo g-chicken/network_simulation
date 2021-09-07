@@ -38,7 +38,7 @@ public class Analysis implements AnalysisInterface {
   public void calcDegreeCentrality() {
     for (int i = 0; i < network.getVertexNum(); i++) {
       try {
-        degreeCentrality[i] = (double) network.degree(i) / (network.getVertexNum() - 1);
+        degreeCentrality[i] = (double) network.getDegree(i) / (network.getVertexNum() - 1);
       } catch (InvalidArguments e) {
         logger.warning(e.toString());
       }

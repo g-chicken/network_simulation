@@ -5,10 +5,10 @@ package data.dto;
  *
  * @param weight the link's weight (length)
  * @param capacity the link's capacity
- * @param tailVertexIndex tail vertex of the link
  * @param headVertexIndex head vertex of the link
+ * @param tailVertexIndex tail vertex of the link
  * @param label label
  */
 public record LinkDto(
-        double weight, double capacity, int tailVertexIndex, int headVertexIndex, String label
+        double weight, double capacity, int headVertexIndex, int tailVertexIndex, String label
 ) {}

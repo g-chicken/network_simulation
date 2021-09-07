@@ -76,13 +76,13 @@ public class Network {
   }
 
   /**
-   * degree calc degree of the vertexIndex.
+   * getDegree get degree of the vertexIndex.
    *
    * @param vertexIndex vertex index
    * @return degree
    * @throws InvalidArguments invalid argument exception
    */
-  public int degree(final int vertexIndex) throws InvalidArguments {
+  public int getDegree(final int vertexIndex) throws InvalidArguments {
     if (vertexIndex < 0 || vertexIndex >= getVertexNum()) {
       throw new InvalidArguments("invalid vertexIndex");
     }
@@ -107,6 +107,14 @@ public class Network {
 
   public Link[] getLinks() {
     return links;
+  }
+
+  public int[] getFirst() {
+    return first;
+  }
+
+  public int[] getAdjList() {
+    return adjList;
   }
 
   @Override

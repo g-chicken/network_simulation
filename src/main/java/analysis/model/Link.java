@@ -10,7 +10,7 @@ public class Link {
   private final int tailIndex;
   private final String label;
 
-  Link(
+  public Link(
       final double weight,
       final double capacity,
       final int headIndex,

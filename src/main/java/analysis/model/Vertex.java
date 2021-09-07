@@ -8,7 +8,7 @@ public class Vertex {
   private final double coordinateY;
   private final String label;
 
-  Vertex(final double x, final double y, final String label) {
+  public Vertex(final double x, final double y, final String label) {
     this.coordinateX = x;
     this.coordinateY = y;
     this.label = label;

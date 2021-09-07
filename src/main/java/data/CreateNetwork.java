@@ -53,10 +53,10 @@ public class CreateNetwork implements CreateNetworkInterface {
       }
 
       linkDtoes[i * 2] =
-          new LinkDto(vertexDtoes[t].distance(vertexDtoes[h]), -1.0, t, h, String.valueOf(i * 2));
+          new LinkDto(vertexDtoes[t].distance(vertexDtoes[h]), -1.0, h, t, String.valueOf(i * 2));
       linkDtoes[i * 2 + 1] =
           new LinkDto(
-              vertexDtoes[t].distance(vertexDtoes[h]), -1.0, h, t, String.valueOf(i * 2 + 1));
+              vertexDtoes[t].distance(vertexDtoes[h]), -1.0, t, h, String.valueOf(i * 2 + 1));
     }
 
     logger.info(String.format("created network (#vertexes = %d, #links = %s)", vertexNum, linkNum));
