@@ -7,6 +7,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class VertexTest {
   @Test
   void constructor() {
+    Vertex vertex = new Vertex(1.3, -20.5, "test");
+    assertEquals(1.3, vertex.getCoordinateX());
+    assertEquals(-20.5, vertex.getCoordinateY());
+    assertEquals("test", vertex.getLabel());
+  }
+
+  @Test
+  void constructorDto() {
     class TestCase {
       private final VertexDto dto;
       private final Vertex want;

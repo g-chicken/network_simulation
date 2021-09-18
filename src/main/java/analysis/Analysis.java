@@ -5,10 +5,8 @@ import data.dto.NetworkDto;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import utils.StdOutHandler;
-import utils.exceptions.DoNotExecution;
 import utils.exceptions.InvalidArguments;
 import utils.network.Dijkstra;
-import utils.network.DijkstraResult;
 
 /** Analysis analyse the network. this class implements AnalysisInterface. */
 public class Analysis implements AnalysisInterface {
@@ -24,7 +22,6 @@ public class Analysis implements AnalysisInterface {
    */
   public Analysis(NetworkDto networkDto) {
     network = new Network(networkDto);
-    network.setAdjacencyList();
 
     degreeCentrality = new double[network.getVertexNum()];
     closenessCentrality = new double[network.getVertexNum()];
@@ -51,12 +48,12 @@ public class Analysis implements AnalysisInterface {
   public void calcClosenessCentrality() {
     Dijkstra dijkstra = new Dijkstra(network);
 
-    try {
-      DijkstraResult result = dijkstra.dijkstra(0);
-      System.out.println(result);
-    } catch (InvalidArguments | DoNotExecution e) {
-      logger.warning(e.toString());
-    }
+    //try {
+    //  DijkstraResult result = dijkstra.dijkstra(0);
+    //  System.out.println(result);
+    //} catch (InvalidArguments | DoNotExecution e) {
+    //  logger.warning(e.toString());
+    //}
 
     // TODO
 

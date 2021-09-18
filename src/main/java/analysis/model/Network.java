@@ -1,41 +1,42 @@
 package analysis.model;
 
+import data.dto.LinkDto;
 import data.dto.NetworkDto;
-import java.util.Arrays;
+import org.jetbrains.annotations.NotNull;
 import utils.exceptions.InvalidArguments;
+import utils.network.CoreNetwork;
 
 /** Network express a network. */
-public class Network {
-  private final Vertex[] vertices;
+public class Network extends CoreNetwork {
+  private final Vertex[] vertexes;
   private final Link[] links;
-  private int[] first;
-  private int[] adjList;
   private final String label;
 
   /**
-   * Network is constructor.
+   * constructor.
    *
-   * @param vertices network's vertexes
-   * @param links network's links
+   * @param vertexes #vertexes
+   * @param links #links
+   * @param tails link of tail
+   * @param heads link of head
+   * @param weights link of weight (length)
    * @param first adjacency list
    * @param adjList adjacency list
-   * @param label label
+   * @param label network's label
    */
   public Network(
-      final Vertex[] vertices,
-      final Link[] links,
+      final Vertex @NotNull [] vertexes,
+      final Link @NotNull [] links,
+      final int[] tails,
+      final int[] heads,
+      final double[] weights,
       final int[] first,
       final int[] adjList,
       final String label) {
-    this.vertices = vertices;
+    super(vertexes.length, links.length, tails, heads, weights, first, adjList);
+    this.vertexes = vertexes;
     this.links = links;
-    this.first = first;
-    this.adjList = adjList;
     this.label = label;
-  }
-
-  public Network(final Vertex[] vertices, final Link[] links, final String label) {
-    this(vertices, links, new int[vertices.length], new int[links.length], label);
   }
 
   /**
@@ -43,36 +44,26 @@ public class Network {
    *
    * @param networkDto a network inputted data
    */
-  public Network(final NetworkDto networkDto) {
-    vertices = new Vertex[networkDto.getVertexNum()];
+  public Network(final @NotNull NetworkDto networkDto) {
+    super(networkDto.getVertexNum(), networkDto.getLinkNum());
+
+    vertexes = new Vertex[networkDto.getVertexNum()];
     for (int i = 0; i < networkDto.getVertexNum(); i++) {
-      vertices[i] = new Vertex(networkDto.vertexDtoes()[i]);
+      vertexes[i] = new Vertex(networkDto.vertexDtoes()[i]);
     }
 
     links = new Link[networkDto.getLinkNum()];
     for (int i = 0; i < networkDto.getLinkNum(); i++) {
-      links[i] = new Link(networkDto.linkDtoes()[i]);
+      LinkDto dto = networkDto.linkDtoes()[i];
+      links[i] = new Link(dto.label());
+      tails[i] = dto.tailVertexIndex();
+      heads[i] = dto.headVertexIndex();
+      weights[i] = dto.weight();
     }
 
     label = networkDto.label();
-  }
 
-  /** setAdjacencyList construct an adjacency list. */
-  public void setAdjacencyList() {
-    if (vertices == null || links == null) {
-      return;
-    }
-
-    first = new int[this.getVertexNum()];
-    Arrays.fill(first, -1);
-
-    adjList = new int[this.getLinkNum()];
-
-    for (int e = this.getLinkNum() - 1; e >= 0; e--) {
-      int v = links[e].getTailIndex();
-      adjList[e] = first[v];
-      first[v] = e;
-    }
+    setAdjacencyList();
   }
 
   /**
@@ -97,24 +88,12 @@ public class Network {
     return degree;
   }
 
-  public int getVertexNum() {
-    return vertices.length;
-  }
-
-  public int getLinkNum() {
-    return links.length;
+  public Vertex[] getVertexes() {
+    return vertexes;
   }
 
   public Link[] getLinks() {
     return links;
-  }
-
-  public int[] getFirst() {
-    return first;
-  }
-
-  public int[] getAdjList() {
-    return adjList;
   }
 
   @Override
@@ -122,7 +101,7 @@ public class Network {
     StringBuilder stringBuilder = new StringBuilder(String.format("label = %s\n", label));
 
     stringBuilder.append("vertex\n");
-    for (Vertex v : vertices) {
+    for (Vertex v : vertexes) {
       stringBuilder.append(String.format("   %s\n", v));
     }
 

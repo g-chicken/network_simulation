@@ -1,5 +1,7 @@
 package data.dto;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * NetworkDto expresses network.
  *
@@ -17,7 +19,7 @@ public record NetworkDto(VertexDto[] vertexDtoes, LinkDto[] linkDtoes, String la
   }
 
   @Override
-  public String toString() {
+  public @NotNull String toString() {
     StringBuilder stringBuilder = new StringBuilder(String.format("label = %s", this.label()));
 
     stringBuilder.append("vertex\n");

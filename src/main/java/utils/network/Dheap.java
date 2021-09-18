@@ -21,26 +21,26 @@ class Dheap {
     Arrays.fill(heapIndexes, -1);
   }
 
-  void add(final int vertexIndex) {
-    heap[heapNum] = vertexIndex;
-    heapIndexes[vertexIndex] = heapNum;
+  void add(final int heapVal) {
+    heap[heapNum] = heapVal;
+    heapIndexes[heapVal] = heapNum;
     heapNum++;
   }
 
-  void shiftUp(final int vertexIndex, final double[] weight)
+  void shiftUp(final int heapVal, final double[] weight)
       throws InvalidArguments, DoNotExecution {
-    if (vertexIndex < 0) {
-      throw new InvalidArguments("vertexIndex is less than 0");
+    if (heapVal < 0) {
+      throw new InvalidArguments("heapVal is less than 0");
     }
 
-    if (vertexIndex >= heapNum) {
+    if (heapVal >= heap.length) {
       throw new InvalidArguments(
           String.format(
-              "vertexIndex is more than or equal to heapNum (vertexIndex = %d, heapNum = %d)",
-              vertexIndex, heapNum));
+              "heapVal is more than or equal to heapNum (heapVal = %d, heapNum = %d)",
+              heapVal, heapNum));
     }
 
-    int child = heapIndexes[vertexIndex];
+    int child = heapIndexes[heapVal];
 
     if (child >= heapNum) {
       throw new DoNotExecution(
@@ -129,18 +129,18 @@ class Dheap {
   }
 
   private void swapHeap(final int heapIndex1, final int heapIndex2) {
-    int vertexIndex = heap[heapIndex1];
+    int heapVal = heap[heapIndex1];
     heap[heapIndex1] = heap[heapIndex2];
-    heap[heapIndex2] = vertexIndex;
+    heap[heapIndex2] = heapVal;
   }
 
-  private void swapHeapIndexes(final int vertexIndex1, final int vertexIndex2) {
-    int heapIndex = heapIndexes[vertexIndex1];
-    heapIndexes[vertexIndex1] = heapIndexes[vertexIndex2];
-    heapIndexes[vertexIndex2] = heapIndex;
+  private void swapHeapIndexes(final int heapVal1, final int heapVal2) {
+    int heapIndex = heapIndexes[heapVal1];
+    heapIndexes[heapVal1] = heapIndexes[heapVal2];
+    heapIndexes[heapVal2] = heapIndex;
   }
 
-  int pop() throws NoSuchElementException {
+  int getFirst() throws NoSuchElementException {
     if (heapNum == 0) {
       throw new NoSuchElementException("will pop heap first element when heap num is 0");
     }

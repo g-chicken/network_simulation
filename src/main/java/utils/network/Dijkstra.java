@@ -1,46 +1,30 @@
 package utils.network;
 
-import analysis.model.Link;
 import analysis.model.Network;
+import java.util.ArrayList;
 import java.util.Arrays;
+import org.jetbrains.annotations.NotNull;
 import utils.exceptions.DoNotExecution;
 import utils.exceptions.InvalidArguments;
 
 /** Dijkstra implements the dijkstra method (search for the shortest path). */
-public class Dijkstra {
-  private final int vertexNum;
-  private final int linkNum;
-  private final int[] tails;
-  private final int[] heads;
-  private final double[] linkWeights;
-  private int[] first;
-  private int[] adjList;
-  private int[] path;
-  private Dheap dheap;
+public class Dijkstra extends CoreNetwork {
+  private final ArrayList<ArrayList<Integer>> paths;
 
-  /**
-   * Dijkstra is constructor.
-   *
-   * @param vertexNum # of vertexes
-   * @param linkNum # of links
-   * @param heads indexes of link's head
-   * @param tails indexes of link's tail
-   * @param weights weights of link's weight (length)
-   */
-  public Dijkstra(
+  Dijkstra(
       final int vertexNum,
       final int linkNum,
-      final int[] heads,
       final int[] tails,
-      final double[] weights) {
-    this.vertexNum = vertexNum;
-    this.linkNum = linkNum;
-    this.heads = heads;
-    this.tails = tails;
-    this.linkWeights = weights;
+      final int[] heads,
+      final double[] weights,
+      final int[] first,
+      final int[] adjList) {
+    super(vertexNum, linkNum, tails, heads, weights, first, adjList);
 
-    setAdjacencyList();
-    initialize();
+    paths = new ArrayList<>();
+    for (int i = 0; i < vertexNum; i++) {
+      paths.add(new ArrayList<>());
+    }
   }
 
   /**
@@ -48,129 +32,72 @@ public class Dijkstra {
    *
    * @param network the network of analysis pkg.
    */
-  public Dijkstra(Network network) {
-    vertexNum = network.getVertexNum();
-    linkNum = network.getLinkNum();
+  public Dijkstra(@NotNull Network network) {
+    super(network.vertexNum, network.linkNum, network.tails, network.heads, network.weights);
+    setAdjacencyList();
 
-    heads = new int[linkNum];
-    tails = new int[linkNum];
-    linkWeights = new double[linkNum];
-
-    for (int i = 0; i < network.getLinkNum(); i++) {
-      Link l = network.getLinks()[i];
-
-      heads[i] = l.getHeadIndex();
-      tails[i] = l.getTailIndex();
-      linkWeights[i] = l.getWeight();
+    paths = new ArrayList<>();
+    for (int i = 0; i < vertexNum; i++) {
+      paths.add(new ArrayList<>());
     }
-
-    first = new int[vertexNum];
-    for (int i = 0; i < network.getVertexNum(); i++) {
-      first[i] = network.getFirst()[i];
-    }
-
-    adjList = new int[linkNum];
-    for (int i = 0; i < network.getLinkNum(); i++) {
-      adjList[i] = network.getAdjList()[i];
-    }
-
-    initialize();
   }
 
   /**
    * dijkstra calc shortest paths.
    *
    * @param startVertexIndex vertex index of start
-   * @return result of dijkstra method
    */
-  public DijkstraResult dijkstra(final int startVertexIndex)
-      throws InvalidArguments, DoNotExecution {
-    DijkstraResult result = new DijkstraResult(startVertexIndex, vertexNum);
+  public void dijkstra(final int startVertexIndex) throws InvalidArguments, DoNotExecution {
+    if (startVertexIndex >= vertexNum || startVertexIndex < 0) {
+      throw new InvalidArguments(
+          String.format("invalid start vertex index (vertex index = %d)", startVertexIndex));
+    }
 
     // initialize
-    path[startVertexIndex] = 0;
-    result.setPathWeight(startVertexIndex, 0.0);
+    paths.forEach(ArrayList::clear);
 
+    double[] pathWeights = new double[vertexNum];
+    Arrays.fill(pathWeights, -1.0);
+
+    Dheap dheap = new Dheap((vertexNum + linkNum - 1) / vertexNum, vertexNum);
     dheap.setFirstHeap(startVertexIndex);
     dheap.setHeapIndexesTo0(startVertexIndex);
     dheap.setHeapNumTo1();
 
     while (dheap.getHeapNum() > 0) {
-      int v1 = dheap.pop();
-      dheap.shiftDown(result.getPathWeights());
+      int v1 = dheap.getFirst();
+      dheap.shiftDown(pathWeights);
 
       int e = first[v1];
       while (e > -1) {
         int v2 = heads[e];
 
-        if (path[v2] == -1) {
-          result.setPathWeight(v2, result.getPathWeight(v1) + linkWeights[e]);
-          path[v2] = e;
+        if (v2 != startVertexIndex) {
+          ArrayList<Integer> p = paths.get(v2);
 
-          dheap.add(v2);
-          dheap.shiftUp(v2, result.getPathWeights());
-        } else if (result.getPathWeight(v2) > result.getPathWeight(v1) + linkWeights[e]) {
-          result.setPathWeight(v2, result.getPathWeight(v1) + linkWeights[e]);
-          path[v2] = e;
-          dheap.shiftUp(v2, result.getPathWeights());
+          if (p.size() == 0) {
+            pathWeights[v2] = pathWeights[v1] + weights[e];
+            p.add(e);
+
+            dheap.add(v2);
+            dheap.shiftUp(v2, pathWeights);
+          } else if (pathWeights[v2] > pathWeights[v1] + weights[e]) {
+            pathWeights[v2] = pathWeights[v1] + weights[e];
+            p.clear();
+            p.add(e);
+
+            dheap.shiftUp(v2, pathWeights);
+          } else if (pathWeights[v2] == pathWeights[v1] + weights[e]) {
+            p.add(e);
+          }
         }
 
         e = adjList[e];
       }
     }
-
-    return result;
   }
 
-  private void setAdjacencyList() {
-    if (vertexNum == 0 || linkNum == 0) {
-      return;
-    }
-
-    first = new int[vertexNum];
-    Arrays.fill(first, -1);
-
-    adjList = new int[linkNum];
-
-    for (int e = linkNum - 1; e >= 0; e--) {
-      int v = tails[e];
-      adjList[e] = first[v];
-      first[v] = e;
-    }
-  }
-
-  private void initialize() {
-    path = new int[vertexNum];
-    dheap = new Dheap((vertexNum + linkNum - 1) / vertexNum, vertexNum);
-
-    Arrays.fill(path, -1);
-  }
-
-  int getVertexNum() {
-    return vertexNum;
-  }
-
-  int getLinkNum() {
-    return linkNum;
-  }
-
-  int[] getHeads() {
-    return heads;
-  }
-
-  int[] getTails() {
-    return tails;
-  }
-
-  double[] getLinkWeights() {
-    return linkWeights;
-  }
-
-  int[] getFirst() {
-    return first;
-  }
-
-  int[] getAdjList() {
-    return adjList;
+  ArrayList<ArrayList<Integer>> getPaths() {
+    return paths;
   }
 }

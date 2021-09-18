@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class DheapTest {
   @Test
   void addAndShiftUp() {
-    // 2-heap
+    // 2-heap_1
     {
       Dheap dheap = new Dheap(2, 6);
       double[] weight = new double[] {5.0, 2.0, 1.0, 4.0, 0.0, 3.0};
@@ -196,6 +196,200 @@ class DheapTest {
       assertEquals(6, dheap.getHeap().length);
       for (int i = 0; i < 6; i++) {
         assertEquals(heap[i], dheap.getHeap()[i]);
+      }
+      assertEquals(6, dheap.getHeapIndexes().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
+      }
+    }
+
+    // 2-heap_2
+    {
+      Dheap dheap = new Dheap(2, 6);
+      double[] weight = new double[] {5.0, 2.0, 1.0, 4.0, 0.0, 3.0};
+
+      // initialization
+      assertEquals(2, dheap.getChildrenNum());
+      assertEquals(0, dheap.getHeapNum());
+
+      // add + shift up
+      int[] heap = new int[] {5, -1, -1, -1, -1, -1};
+      int[] heapIndex = new int[] {-1, -1, -1, -1, -1, 0};
+      dheap.add(5);
+      assertEquals(2, dheap.getChildrenNum());
+      assertEquals(1, dheap.getHeapNum());
+      assertEquals(6, dheap.getHeap().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heap[i], dheap.getHeap()[i], "heap (i = " + i + ")");
+      }
+      assertEquals(6, dheap.getHeapIndexes().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
+      }
+
+      try {
+        dheap.shiftUp(5, weight);
+      } catch (InvalidArguments | DoNotExecution e) {
+        assertEquals("", e.toString());
+      }
+      assertEquals(6, dheap.getHeap().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heap[i], dheap.getHeap()[i]);
+      }
+      assertEquals(6, dheap.getHeapIndexes().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
+      }
+
+      // add + shift up
+      heap = new int[] {5, 4, -1, -1, -1, -1};
+      heapIndex = new int[] {-1, -1, -1, -1, 1, 0};
+      dheap.add(4);
+      assertEquals(2, dheap.getChildrenNum());
+      assertEquals(2, dheap.getHeapNum());
+      assertEquals(6, dheap.getHeap().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heap[i], dheap.getHeap()[i], "heap (i = " + i + ")");
+      }
+      assertEquals(6, dheap.getHeapIndexes().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
+      }
+
+      try {
+        dheap.shiftUp(4, weight);
+      } catch (InvalidArguments | DoNotExecution e) {
+        assertEquals("", e.toString());
+      }
+      heap = new int[] {4, 5, -1, -1, -1, -1};
+      heapIndex = new int[] {-1, -1, -1, -1, 0, 1};
+      assertEquals(6, dheap.getHeap().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heap[i], dheap.getHeap()[i], "heap (index = " + i + ")");
+      }
+      assertEquals(6, dheap.getHeapIndexes().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
+      }
+
+      // add + shift up
+      heap = new int[] {4, 5, 3, -1, -1, -1};
+      heapIndex = new int[] {-1, -1, -1, 2, 0, 1};
+      dheap.add(3);
+      assertEquals(2, dheap.getChildrenNum());
+      assertEquals(3, dheap.getHeapNum());
+      assertEquals(6, dheap.getHeap().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heap[i], dheap.getHeap()[i], "heap (i = " + i + ")");
+      }
+      assertEquals(6, dheap.getHeapIndexes().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
+      }
+
+      try {
+        dheap.shiftUp(3, weight);
+      } catch (InvalidArguments | DoNotExecution e) {
+        assertEquals("", e.toString());
+      }
+      heap = new int[] {4, 5, 3, -1, -1, -1};
+      heapIndex = new int[] {-1, -1, -1, 2, 0, 1};
+      assertEquals(6, dheap.getHeap().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heap[i], dheap.getHeap()[i], "heap (index = " + i + ")");
+      }
+      assertEquals(6, dheap.getHeapIndexes().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
+      }
+
+      // add + shift up
+      heap = new int[] {4, 5, 3, 2, -1, -1};
+      heapIndex = new int[] {-1, -1, 3, 2, 0, 1};
+      dheap.add(2);
+      assertEquals(2, dheap.getChildrenNum());
+      assertEquals(4, dheap.getHeapNum());
+      assertEquals(6, dheap.getHeap().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heap[i], dheap.getHeap()[i], "heap (i = " + i + ")");
+      }
+      assertEquals(6, dheap.getHeapIndexes().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
+      }
+
+      try {
+        dheap.shiftUp(2, weight);
+      } catch (InvalidArguments | DoNotExecution e) {
+        assertEquals("", e.toString());
+      }
+      heap = new int[] {4, 2, 3, 5, -1, -1};
+      heapIndex = new int[] {-1, -1, 1, 2, 0, 3};
+      assertEquals(6, dheap.getHeap().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heap[i], dheap.getHeap()[i], "heap (index = " + i + ")");
+      }
+      assertEquals(6, dheap.getHeapIndexes().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
+      }
+
+      // add + shift up
+      heap = new int[] {4, 2, 3, 5, 1, -1};
+      heapIndex = new int[] {-1, 4, 1, 2, 0, 3};
+      dheap.add(1);
+      assertEquals(2, dheap.getChildrenNum());
+      assertEquals(5, dheap.getHeapNum());
+      assertEquals(6, dheap.getHeap().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heap[i], dheap.getHeap()[i], "heap (i = " + i + ")");
+      }
+      assertEquals(6, dheap.getHeapIndexes().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
+      }
+
+      try {
+        dheap.shiftUp(1, weight);
+      } catch (InvalidArguments | DoNotExecution e) {
+        assertEquals("", e.toString());
+      }
+      heap = new int[] {4, 2, 3, 5, 1, -1};
+      heapIndex = new int[] {-1, 4, 1, 2, 0, 3};
+      assertEquals(6, dheap.getHeap().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heap[i], dheap.getHeap()[i], "heap (index = " + i + ")");
+      }
+      assertEquals(6, dheap.getHeapIndexes().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
+      }
+
+      // add + shift up
+      heap = new int[] {4, 2, 3, 5, 1, 0};
+      heapIndex = new int[] {5, 4, 1, 2, 0, 3};
+      dheap.add(0);
+      assertEquals(2, dheap.getChildrenNum());
+      assertEquals(6, dheap.getHeapNum());
+      assertEquals(6, dheap.getHeap().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heap[i], dheap.getHeap()[i], "heap (i = " + i + ")");
+      }
+      assertEquals(6, dheap.getHeapIndexes().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
+      }
+
+      try {
+        dheap.shiftUp(0, weight);
+      } catch (InvalidArguments | DoNotExecution e) {
+        assertEquals("", e.toString());
+      }
+      heap = new int[] {4, 2, 3, 5, 1, 0};
+      heapIndex = new int[] {5, 4, 1, 2, 0, 3};
+      assertEquals(6, dheap.getHeap().length);
+      for (int i = 0; i < 6; i++) {
+        assertEquals(heap[i], dheap.getHeap()[i], "heap (index = " + i + ")");
       }
       assertEquals(6, dheap.getHeapIndexes().length);
       for (int i = 0; i < 6; i++) {
@@ -467,7 +661,7 @@ class DheapTest {
         dheap.shiftUp(100, null);
       } catch (InvalidArguments e) {
         assertEquals(
-            "utils.exceptions.InvalidArguments: Invalid Argument : vertexIndex is more than or equal to heapNum (vertexIndex = 100, heapNum = 0)",
+            "utils.exceptions.InvalidArguments: Invalid Argument : heapVal is more than or equal to heapNum (heapVal = 100, heapNum = 0)",
             e.toString());
       } catch (DoNotExecution e) {
         assertEquals("", e.toString());
@@ -477,7 +671,7 @@ class DheapTest {
         dheap.shiftUp(-1, null);
       } catch (InvalidArguments e) {
         assertEquals(
-            "utils.exceptions.InvalidArguments: Invalid Argument : vertexIndex is less than 0",
+            "utils.exceptions.InvalidArguments: Invalid Argument : heapVal is less than 0",
             e.toString());
       } catch (DoNotExecution e) {
         assertEquals("", e.toString());
@@ -510,8 +704,8 @@ class DheapTest {
         }
       }
 
-      // pop and shift down
-      assertEquals(4, dheap.pop());
+      // getFirst and shift down
+      assertEquals(4, dheap.getFirst());
       assertEquals(5, dheap.getHeapNum());
       assertEquals(2, dheap.getChildrenNum());
       int[] heap = new int[] {5, 2, 1, 0, 3, 5};
@@ -541,8 +735,8 @@ class DheapTest {
         assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
       }
 
-      // pop and shift down
-      assertEquals(2, dheap.pop());
+      // getFirst and shift down
+      assertEquals(2, dheap.getFirst());
       assertEquals(4, dheap.getHeapNum());
       assertEquals(2, dheap.getChildrenNum());
       heap = new int[] {3, 5, 1, 0, 3, 5};
@@ -572,8 +766,8 @@ class DheapTest {
         assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
       }
 
-      // pop and shift down
-      assertEquals(1, dheap.pop());
+      // getFirst and shift down
+      assertEquals(1, dheap.getFirst());
       assertEquals(3, dheap.getHeapNum());
       assertEquals(2, dheap.getChildrenNum());
       heap = new int[] {0, 5, 3, 0, 3, 5};
@@ -603,8 +797,8 @@ class DheapTest {
         assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
       }
 
-      // pop and shift down
-      assertEquals(5, dheap.pop());
+      // getFirst and shift down
+      assertEquals(5, dheap.getFirst());
       assertEquals(2, dheap.getHeapNum());
       assertEquals(2, dheap.getChildrenNum());
       heap = new int[] {3, 0, 3, 0, 3, 5};
@@ -634,8 +828,8 @@ class DheapTest {
         assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
       }
 
-      // pop and shift down
-      assertEquals(3, dheap.pop());
+      // getFirst and shift down
+      assertEquals(3, dheap.getFirst());
       assertEquals(1, dheap.getHeapNum());
       assertEquals(2, dheap.getChildrenNum());
       heap = new int[] {0, 0, 3, 0, 3, 5};
@@ -665,8 +859,8 @@ class DheapTest {
         assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
       }
 
-      // pop and shift down
-      assertEquals(0, dheap.pop());
+      // getFirst and shift down
+      assertEquals(0, dheap.getFirst());
       assertEquals(0, dheap.getHeapNum());
       assertEquals(2, dheap.getChildrenNum());
       heap = new int[] {0, 0, 3, 0, 3, 5};
@@ -710,8 +904,8 @@ class DheapTest {
         }
       }
 
-      // pop and shift down
-      assertEquals(7, dheap.pop());
+      // getFirst and shift down
+      assertEquals(7, dheap.getFirst());
       assertEquals(7, dheap.getHeapNum());
       assertEquals(3, dheap.getChildrenNum());
       int[] heap = new int[] {2, 1, 4, 3, 0, 5, 6, 2};
@@ -741,8 +935,8 @@ class DheapTest {
         assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
       }
 
-      // pop and shift down
-      assertEquals(4, dheap.pop());
+      // getFirst and shift down
+      assertEquals(4, dheap.getFirst());
       assertEquals(6, dheap.getHeapNum());
       assertEquals(3, dheap.getChildrenNum());
       heap = new int[] {6, 1, 2, 3, 0, 5, 6, 2};
@@ -772,8 +966,8 @@ class DheapTest {
         assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
       }
 
-      // pop and shift down
-      assertEquals(1, dheap.pop());
+      // getFirst and shift down
+      assertEquals(1, dheap.getFirst());
       assertEquals(5, dheap.getHeapNum());
       assertEquals(3, dheap.getChildrenNum());
       heap = new int[] {6, 5, 2, 3, 0, 6, 6, 2};
@@ -803,8 +997,8 @@ class DheapTest {
         assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
       }
 
-      // pop and shift down
-      assertEquals(5, dheap.pop());
+      // getFirst and shift down
+      assertEquals(5, dheap.getFirst());
       assertEquals(4, dheap.getHeapNum());
       assertEquals(3, dheap.getChildrenNum());
       heap = new int[] {6, 0, 2, 3, 6, 6, 6, 2};
@@ -834,8 +1028,8 @@ class DheapTest {
         assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
       }
 
-      // pop and shift down
-      assertEquals(3, dheap.pop());
+      // getFirst and shift down
+      assertEquals(3, dheap.getFirst());
       assertEquals(3, dheap.getHeapNum());
       assertEquals(3, dheap.getChildrenNum());
       heap = new int[] {2, 6, 0, 2, 6, 6, 6, 2};
@@ -865,8 +1059,8 @@ class DheapTest {
         assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
       }
 
-      // pop and shift down
-      assertEquals(0, dheap.pop());
+      // getFirst and shift down
+      assertEquals(0, dheap.getFirst());
       assertEquals(2, dheap.getHeapNum());
       assertEquals(3, dheap.getChildrenNum());
       heap = new int[] {6, 2, 6, 2, 6, 6, 6, 2};
@@ -896,8 +1090,8 @@ class DheapTest {
         assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
       }
 
-      // pop and shift down
-      assertEquals(6, dheap.pop());
+      // getFirst and shift down
+      assertEquals(6, dheap.getFirst());
       assertEquals(1, dheap.getHeapNum());
       assertEquals(3, dheap.getChildrenNum());
       heap = new int[] {2, 2, 6, 2, 6, 6, 6, 2};
@@ -927,8 +1121,8 @@ class DheapTest {
         assertEquals(heapIndex[i], dheap.getHeapIndexes()[i]);
       }
 
-      // pop and shift down
-      assertEquals(2, dheap.pop());
+      // getFirst and shift down
+      assertEquals(2, dheap.getFirst());
       assertEquals(0, dheap.getHeapNum());
       assertEquals(3, dheap.getChildrenNum());
       heap = new int[] {2, 2, 6, 2, 6, 6, 6, 2};
