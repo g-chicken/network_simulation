@@ -1,8 +1,13 @@
 package utils.network;
 
 import analysis.model.Network;
+
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+
 import org.jetbrains.annotations.NotNull;
 import utils.exceptions.DoNotExecution;
 import utils.exceptions.InvalidArguments;
@@ -94,6 +99,50 @@ public class Dijkstra extends CoreNetwork {
 
         e = adjList[e];
       }
+    }
+  }
+
+  /**
+   * getPathList create path lists from this.paths. this method expected executed after dijkstra
+   * method.
+   *
+   * @param destinationVertexIndex destination
+   * @return path list
+   * @throws InvalidArguments invalid argument exception
+   */
+  public LinkedList<LinkedList<Integer>> getPathList(final int destinationVertexIndex)
+      throws InvalidArguments {
+    if (destinationVertexIndex < 0 || destinationVertexIndex >= vertexNum) {
+      throw new InvalidArguments(
+          String.format(
+              "invalid destination vertex index (vertex index = %d)", destinationVertexIndex));
+    }
+
+    if (paths == null || paths.size() == 0 || paths.get(destinationVertexIndex).size() == 0) {
+      return new LinkedList<>();
+    }
+
+    LinkedList<LinkedList<Integer>> pathList = new LinkedList<>();
+    scanPaths(destinationVertexIndex, new LinkedList<>(), pathList);
+
+    return pathList;
+  }
+
+  private void scanPaths(
+      final int vertexIndex,
+      final LinkedList<Integer> path,
+      final LinkedList<LinkedList<Integer>> pathList) {
+    if (paths.get(vertexIndex).size() == 0) {
+      Collections.reverse(path);
+      pathList.addLast(new LinkedList<>(path));
+
+      return;
+    }
+
+    for (Integer linkIndex : paths.get(vertexIndex)) {
+      path.addLast(linkIndex);
+      scanPaths(tails[linkIndex], path, pathList);
+      path.pollLast();
     }
   }
 

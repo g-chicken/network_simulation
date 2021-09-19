@@ -3,11 +3,11 @@ package utils.network;
 import analysis.model.Link;
 import analysis.model.Network;
 import analysis.model.Vertex;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import org.junit.jupiter.api.Test;
 import utils.exceptions.DoNotExecution;
 import utils.exceptions.InvalidArguments;
-
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -898,6 +898,278 @@ class DijkstraTest {
             e.toString());
       } catch (DoNotExecution e) {
         assertEquals("", e.toString());
+      }
+    }
+  }
+
+  @Test
+  void getPathList() {
+    //   0 --(0:2)-- 1 --(1:4)-- 2 --(2:5)-- 3
+    //   |           |           |
+    // (3:1)       (4:1)       (5:1)
+    //   |           |           |
+    //   4 --(6:1)-- 5 --(7:2)-- 6 --(8:3)-- 7
+    int[] tails = new int[] {0, 1, 1, 2, 2, 3, 0, 4, 1, 5, 2, 6, 4, 5, 5, 6, 6, 7};
+    int[] heads = new int[] {1, 0, 2, 1, 3, 2, 4, 0, 5, 1, 6, 2, 5, 4, 6, 5, 7, 6};
+    double[] weights = new double[] {2, 2, 4, 4, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3};
+    int[] first = new int[] {0, 1, 3, 5, 7, 9, 11, 17};
+    int[] adjList = new int[] {6, 2, 8, 4, 10, -1, -1, 12, -1, 13, -1, 15, -1, 14, -1, 16, -1, -1};
+
+    Dijkstra dijkstra = new Dijkstra(8, 18, tails, heads, weights, first, adjList);
+
+    try {
+      dijkstra.dijkstra(2);
+    } catch (InvalidArguments | DoNotExecution e) {
+      assertEquals("", e.toString());
+    }
+
+    // destination = 0
+    {
+      LinkedList<LinkedList<Integer>> want = new LinkedList<>();
+      want.add(
+          new LinkedList<>() {
+            {
+              add(10);
+              add(15);
+              add(13);
+              add(7);
+            }
+          });
+
+      LinkedList<LinkedList<Integer>> got = new LinkedList<>();
+
+      try {
+        got = dijkstra.getPathList(0);
+      } catch (InvalidArguments e) {
+        assertEquals("", e.toString());
+      }
+
+      assertEquals(want.size(), got.size());
+
+      for (int i = 0; i < want.size(); i++) {
+        assertEquals(want.get(i).size(), got.get(i).size());
+
+        for (int i1 = 0; i1 < want.get(i).size(); i1++) {
+          assertEquals(want.get(i).get(i1), got.get(i).get(i1));
+        }
+      }
+    }
+
+    // destination = 1
+    {
+      LinkedList<LinkedList<Integer>> want = new LinkedList<>();
+      want.add(
+          new LinkedList<>() {
+            {
+              add(3);
+            }
+          });
+      want.add(
+          new LinkedList<>() {
+            {
+              add(10);
+              add(15);
+              add(9);
+            }
+          });
+
+      LinkedList<LinkedList<Integer>> got = new LinkedList<>();
+
+      try {
+        got = dijkstra.getPathList(1);
+      } catch (InvalidArguments e) {
+        assertEquals("", e.toString());
+      }
+
+      assertEquals(want.size(), got.size());
+
+      for (int i = 0; i < want.size(); i++) {
+        assertEquals(want.get(i).size(), got.get(i).size());
+
+        for (int i1 = 0; i1 < want.get(i).size(); i1++) {
+          assertEquals(want.get(i).get(i1), got.get(i).get(i1));
+        }
+      }
+    }
+
+    // destination = 2
+    {
+      LinkedList<LinkedList<Integer>> got = new LinkedList<>();
+
+      try {
+        got = dijkstra.getPathList(2);
+      } catch (InvalidArguments e) {
+        assertEquals("", e.toString());
+      }
+
+      assertEquals(0, got.size());
+    }
+
+    // destination = 3
+    {
+      LinkedList<LinkedList<Integer>> want = new LinkedList<>();
+      want.add(
+          new LinkedList<>() {
+            {
+              add(4);
+            }
+          });
+
+      LinkedList<LinkedList<Integer>> got = new LinkedList<>();
+
+      try {
+        got = dijkstra.getPathList(3);
+      } catch (InvalidArguments e) {
+        assertEquals("", e.toString());
+      }
+
+      assertEquals(want.size(), got.size());
+
+      for (int i = 0; i < want.size(); i++) {
+        assertEquals(want.get(i).size(), got.get(i).size());
+
+        for (int i1 = 0; i1 < want.get(i).size(); i1++) {
+          assertEquals(want.get(i).get(i1), got.get(i).get(i1));
+        }
+      }
+    }
+
+    // destination = 4
+    {
+      LinkedList<LinkedList<Integer>> want = new LinkedList<>();
+      want.add(
+          new LinkedList<>() {
+            {
+              add(10);
+              add(15);
+              add(13);
+            }
+          });
+
+      LinkedList<LinkedList<Integer>> got = new LinkedList<>();
+
+      try {
+        got = dijkstra.getPathList(4);
+      } catch (InvalidArguments e) {
+        assertEquals("", e.toString());
+      }
+
+      assertEquals(want.size(), got.size());
+
+      for (int i = 0; i < want.size(); i++) {
+        assertEquals(want.get(i).size(), got.get(i).size());
+
+        for (int i1 = 0; i1 < want.get(i).size(); i1++) {
+          assertEquals(want.get(i).get(i1), got.get(i).get(i1));
+        }
+      }
+    }
+
+    // destination = 5
+    {
+      LinkedList<LinkedList<Integer>> want = new LinkedList<>();
+      want.add(
+          new LinkedList<>() {
+            {
+              add(10);
+              add(15);
+            }
+          });
+
+      LinkedList<LinkedList<Integer>> got = new LinkedList<>();
+
+      try {
+        got = dijkstra.getPathList(5);
+      } catch (InvalidArguments e) {
+        assertEquals("", e.toString());
+      }
+
+      assertEquals(want.size(), got.size());
+
+      for (int i = 0; i < want.size(); i++) {
+        assertEquals(want.get(i).size(), got.get(i).size());
+
+        for (int i1 = 0; i1 < want.get(i).size(); i1++) {
+          assertEquals(want.get(i).get(i1), got.get(i).get(i1));
+        }
+      }
+    }
+
+    // destination = 6
+    {
+      LinkedList<LinkedList<Integer>> want = new LinkedList<>();
+      want.add(
+          new LinkedList<>() {
+            {
+              add(10);
+            }
+          });
+
+      LinkedList<LinkedList<Integer>> got = new LinkedList<>();
+
+      try {
+        got = dijkstra.getPathList(6);
+      } catch (InvalidArguments e) {
+        assertEquals("", e.toString());
+      }
+
+      assertEquals(want.size(), got.size());
+
+      for (int i = 0; i < want.size(); i++) {
+        assertEquals(want.get(i).size(), got.get(i).size());
+
+        for (int i1 = 0; i1 < want.get(i).size(); i1++) {
+          assertEquals(want.get(i).get(i1), got.get(i).get(i1));
+        }
+      }
+    }
+
+    // destination = 7
+    {
+      LinkedList<LinkedList<Integer>> want = new LinkedList<>();
+      want.add(
+          new LinkedList<>() {
+            {
+              add(10);
+              add(16);
+            }
+          });
+
+      LinkedList<LinkedList<Integer>> got = new LinkedList<>();
+
+      try {
+        got = dijkstra.getPathList(7);
+      } catch (InvalidArguments e) {
+        assertEquals("", e.toString());
+      }
+
+      assertEquals(want.size(), got.size());
+
+      for (int i = 0; i < want.size(); i++) {
+        assertEquals(want.get(i).size(), got.get(i).size());
+
+        for (int i1 = 0; i1 < want.get(i).size(); i1++) {
+          assertEquals(want.get(i).get(i1), got.get(i).get(i1));
+        }
+      }
+    }
+
+    // exception
+    {
+      try {
+        dijkstra.getPathList(-1);
+      } catch (InvalidArguments e) {
+        assertEquals(
+            "utils.exceptions.InvalidArguments: Invalid Argument : invalid destination vertex index (vertex index = -1)",
+            e.toString());
+      }
+
+      try {
+        dijkstra.getPathList(8);
+      } catch (InvalidArguments e) {
+        assertEquals(
+            "utils.exceptions.InvalidArguments: Invalid Argument : invalid destination vertex index (vertex index = 8)",
+            e.toString());
       }
     }
   }

@@ -2,6 +2,7 @@ package analysis.model;
 
 import data.dto.LinkDto;
 import data.dto.NetworkDto;
+import java.util.LinkedList;
 import org.jetbrains.annotations.NotNull;
 import utils.exceptions.InvalidArguments;
 import utils.network.CoreNetwork;
@@ -86,6 +87,68 @@ public class Network extends CoreNetwork {
     }
 
     return degree;
+  }
+
+  /**
+   * searchPathNum count origin-destination paths.
+   *
+   * @param originVertexIndex origin vertex index
+   * @param destinationVertexIndex destination vertex index
+   * @return #paths
+   * @throws InvalidArguments invalid argument exception
+   */
+  public int searchPathNum(final int originVertexIndex, final int destinationVertexIndex)
+      throws InvalidArguments {
+    if (originVertexIndex < 0 || originVertexIndex >= vertexNum) {
+      throw new InvalidArguments(
+          String.format("invalid origin vertex index (vertex index = %d)", originVertexIndex));
+    }
+
+    if (destinationVertexIndex < 0 || destinationVertexIndex >= vertexNum) {
+      throw new InvalidArguments(
+          String.format(
+              "invalid destination vertex index (vertex index = %d)", destinationVertexIndex));
+    }
+
+    if (originVertexIndex == destinationVertexIndex) {
+      return 0;
+    }
+
+    LinkedList<Integer> stack =
+        new LinkedList<>() {
+          {
+            add(originVertexIndex);
+          }
+        };
+
+    return depthFirstSearch(stack, destinationVertexIndex, 0);
+  }
+
+  private int depthFirstSearch(
+      final LinkedList<Integer> stack, final int destinationVertexIndex, int pathNum) {
+    if (stack == null || stack.size() == 0) {
+      return pathNum;
+    }
+
+    int v = stack.peekLast();
+    int e = first[v];
+
+    while (e > -1) {
+      int headV = heads[e];
+
+      if (headV == destinationVertexIndex) {
+        pathNum++;
+      } else if (!stack.contains(headV)) {
+        stack.add(headV);
+        pathNum = depthFirstSearch(stack, destinationVertexIndex, pathNum);
+      }
+
+      e = adjList[e];
+    }
+
+    stack.pollLast();
+
+    return pathNum;
   }
 
   public Vertex[] getVertexes() {
