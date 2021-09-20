@@ -1,13 +1,9 @@
 package utils.network;
 
 import analysis.model.Network;
-
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
-
 import org.jetbrains.annotations.NotNull;
 import utils.exceptions.DoNotExecution;
 import utils.exceptions.InvalidArguments;
@@ -104,8 +100,7 @@ public class Dijkstra extends CoreNetwork {
 
   /**
    * getPathList create path lists from this.paths. this method expected executed after dijkstra
-   * method.
-   * if weights are all 0, this method cause overflow.
+   * method. if weights are all 0, this method cause overflow.
    *
    * @param destinationVertexIndex destination
    * @return path list

@@ -2,7 +2,6 @@ package analysis.model;
 
 import data.dto.LinkDto;
 import data.dto.NetworkDto;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import org.jetbrains.annotations.NotNull;
