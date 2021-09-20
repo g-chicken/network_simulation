@@ -8,6 +8,9 @@ public interface AnalysisInterface {
   /** calcVertexClosenessCentrality calc the closeness centrality for the vertexes. */
   void calcVertexClosenessCentrality();
 
+  /** calcLinkClosenessCentrality calc the closeness centrality for the links. */
+  void calcLinkClosenessCentrality();
+
   /**
    * getAnalysisResult get the result of analysis of network.
    *

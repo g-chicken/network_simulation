@@ -29,6 +29,7 @@ public class Sample {
     AnalysisInterface analysis = new Analysis(dto);
     analysis.calcDegreeCentrality();
     analysis.calcVertexClosenessCentrality();
+    analysis.calcLinkClosenessCentrality();
     System.out.println(analysis.getAnalysisResult());
   }
 }

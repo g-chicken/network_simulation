@@ -18,7 +18,7 @@ public class Analysis implements AnalysisInterface {
   private final Network network;
   private final double[] degreeCentrality;
   private final double[] vertexClosenessCentrality;
-  // private final double[] linkClosenessCentrality;
+  private final double[] linkClosenessCentrality;
 
   /**
    * Analysis is constructor.
@@ -30,7 +30,7 @@ public class Analysis implements AnalysisInterface {
 
     degreeCentrality = new double[network.getVertexNum()];
     vertexClosenessCentrality = new double[network.getVertexNum()];
-    // linkClosenessCentrality = new double[network.getLinkNum()];
+    linkClosenessCentrality = new double[network.getLinkNum()];
 
     logger.addHandler(new StdOutHandler());
     logger.setUseParentHandlers(false);
@@ -64,38 +64,6 @@ public class Analysis implements AnalysisInterface {
     }
 
     logger.info("calculated closeness centrality");
-  }
-
-  private int @NotNull [] calcPathsNumForVertexClosenessCentrality() {
-    int[] totalPaths = new int[network.getVertexNum()];
-
-    for (int origin = 0; origin < network.getVertexNum(); origin++) {
-      for (int destination = 0; destination < network.getVertexNum(); destination++) {
-        if (origin == destination) {
-          continue;
-        }
-
-        boolean connected;
-
-        try {
-          connected = network.isConnected(origin, destination);
-        } catch (InvalidArguments e) {
-          logger.warning(e.toString());
-
-          continue;
-        }
-
-        if (connected) {
-          for (int v = 0; v < network.getVertexNum(); v++) {
-            if (v != origin && v != destination) {
-              totalPaths[v]++;
-            }
-          }
-        }
-      }
-    }
-
-    return totalPaths;
   }
 
   private void calcNumeratorOfVertexClosenessCentrality(final Dijkstra dijkstra) {
@@ -152,12 +120,140 @@ public class Analysis implements AnalysisInterface {
     }
   }
 
+  private int @NotNull [] calcPathsNumForVertexClosenessCentrality() {
+    int[] totalPaths = new int[network.getVertexNum()];
+
+    for (int origin = 0; origin < network.getVertexNum(); origin++) {
+      for (int destination = 0; destination < network.getVertexNum(); destination++) {
+        if (origin == destination) {
+          continue;
+        }
+
+        boolean connected;
+
+        try {
+          connected = network.isConnected(origin, destination);
+        } catch (InvalidArguments e) {
+          logger.warning(e.toString());
+
+          continue;
+        }
+
+        if (connected) {
+          for (int v = 0; v < network.getVertexNum(); v++) {
+            if (v != origin && v != destination) {
+              totalPaths[v]++;
+            }
+          }
+        }
+      }
+    }
+
+    return totalPaths;
+  }
+
+  @Override
+  public void calcLinkClosenessCentrality() {
+    Arrays.fill(linkClosenessCentrality, 0.0);
+
+    Dijkstra dijkstra = new Dijkstra(network);
+    calcNumeratorOfLinkClosenessCentrality(dijkstra);
+
+    int totalPath = calcPathNumForLinkClosenessCentrality();
+
+    for (int i = 0; i < network.getLinkNum(); i++) {
+      linkClosenessCentrality[i] /= totalPath;
+    }
+  }
+
+  private void calcNumeratorOfLinkClosenessCentrality(final Dijkstra dijkstra) {
+    for (int originVertexIndex = 0;
+        originVertexIndex < network.getVertexNum();
+        originVertexIndex++) {
+      try {
+        dijkstra.dijkstra(originVertexIndex);
+      } catch (InvalidArguments e) {
+        logger.warning(e.toString());
+
+        continue;
+      } catch (DoNotExecution e) {
+        logger.severe(e.toString());
+
+        return;
+      }
+
+      for (int destinationVertexIndex = 0;
+          destinationVertexIndex < network.getVertexNum();
+          destinationVertexIndex++) {
+        LinkedList<LinkedList<Integer>> pathLists;
+
+        try {
+          pathLists = dijkstra.getPathList(destinationVertexIndex);
+        } catch (InvalidArguments e) {
+          logger.warning(e.toString());
+
+          continue;
+        }
+
+        if (pathLists.size() == 0) {
+          continue;
+        }
+
+        int[] shortestPathNumThroughE = new int[network.getLinkNum()];
+        int shortestPathNum = pathLists.size();
+
+        for (LinkedList<Integer> list : pathLists) {
+          while (list.size() > 0) {
+            int e = list.pollFirst();
+            shortestPathNumThroughE[e]++;
+          }
+        }
+
+        for (int e = 0; e < network.getLinkNum(); e++) {
+          linkClosenessCentrality[e] += shortestPathNumThroughE[e] / (double) shortestPathNum;
+        }
+      }
+    }
+  }
+
+  private int calcPathNumForLinkClosenessCentrality() {
+    int totalPath = 0;
+
+    for (int origin = 0; origin < network.getVertexNum(); origin++) {
+      for (int destination = 0; destination < network.getVertexNum(); destination++) {
+        if (origin == destination) {
+          continue;
+        }
+
+        boolean connected;
+
+        try {
+          connected = network.isConnected(origin, destination);
+        } catch (InvalidArguments e) {
+          logger.warning(e.toString());
+
+          continue;
+        }
+
+        if (connected) {
+          totalPath++;
+        }
+      }
+    }
+
+    return totalPath;
+  }
+
   double[] getDegreeCentrality() {
     return degreeCentrality;
   }
 
   double[] getVertexClosenessCentrality() {
     return vertexClosenessCentrality;
+  }
+
+  double[] getLinkClosenessCentrality() {
+    return linkClosenessCentrality;
   }
 
   @Override
@@ -179,13 +275,13 @@ public class Analysis implements AnalysisInterface {
       stringBuilder.append(String.format("   [%3d] = %11.10f\n", i, vertexClosenessCentrality[i]));
     }
 
-    // stringBuilder.append("link closeness centrality\n");
-    // for (int i = 0; i < network.getLinkNum(); i++) {
-    //  stringBuilder.append(
-    //      String.format(
-    //          "   %3d - %3d = %11.10f\n",
-    //          network.getTails()[i], network.getHeads()[i], linkClosenessCentrality[i]));
-    // }
+    stringBuilder.append("link closeness centrality\n");
+    for (int i = 0; i < network.getLinkNum(); i++) {
+      stringBuilder.append(
+          String.format(
+              "   %3d - %3d = %11.10f\n",
+              network.getTails()[i], network.getHeads()[i], linkClosenessCentrality[i]));
+    }
 
     return stringBuilder.toString();
   }
