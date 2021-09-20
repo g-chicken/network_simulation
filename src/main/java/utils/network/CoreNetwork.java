@@ -55,11 +55,11 @@ public class CoreNetwork {
   }
 
   protected void setAdjacencyList() {
+    Arrays.fill(first, -1);
+
     if (vertexNum == 0 || linkNum == 0) {
       return;
     }
-
-    Arrays.fill(first, -1);
 
     for (int e = linkNum - 1; e >= 0; e--) {
       int v = tails[e];

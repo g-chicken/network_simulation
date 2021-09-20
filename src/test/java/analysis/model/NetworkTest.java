@@ -195,7 +195,7 @@ class NetworkTest {
   }
 
   @Test
-  void searchPathNum() {
+  void isConnected() {
     //   0 --(0:2)-- 1 --(1:4)-- 2 --(2:5)-- 3
     //   |           |           |
     // (3:1)       (4:1)       (5:1)
@@ -246,8 +246,7 @@ class NetworkTest {
       // origin = 0, destination = 0
       {
         try {
-          int got = network.searchPathNum(0, 0);
-          assertEquals(0, got);
+          assertTrue(network.isConnected(0, 0));
         } catch (InvalidArguments e) {
           assertEquals("", e.toString());
         }
@@ -256,8 +255,7 @@ class NetworkTest {
       // origin = 0, destination = 1
       {
         try {
-          int got = network.searchPathNum(0, 1);
-          assertEquals(3, got);
+          assertTrue(network.isConnected(0, 1));
         } catch (InvalidArguments e) {
           assertEquals("", e.toString());
         }
@@ -266,8 +264,7 @@ class NetworkTest {
       // origin = 0, destination = 2
       {
         try {
-          int got = network.searchPathNum(0, 2);
-          assertEquals(4, got);
+          assertTrue(network.isConnected(0, 2));
         } catch (InvalidArguments e) {
           assertEquals("", e.toString());
         }
@@ -276,8 +273,7 @@ class NetworkTest {
       // origin = 0, destination = 3
       {
         try {
-          int got = network.searchPathNum(0, 3);
-          assertEquals(4, got);
+          assertTrue(network.isConnected(0, 3));
         } catch (InvalidArguments e) {
           assertEquals("", e.toString());
         }
@@ -286,8 +282,7 @@ class NetworkTest {
       // origin = 0, destination = 4
       {
         try {
-          int got = network.searchPathNum(0, 4);
-          assertEquals(3, got);
+          assertTrue(network.isConnected(0, 4));
         } catch (InvalidArguments e) {
           assertEquals("", e.toString());
         }
@@ -296,8 +291,7 @@ class NetworkTest {
       // origin = 0, destination = 5
       {
         try {
-          int got = network.searchPathNum(0, 5);
-          assertEquals(3, got);
+          assertTrue(network.isConnected(0, 5));
         } catch (InvalidArguments e) {
           assertEquals("", e.toString());
         }
@@ -306,8 +300,7 @@ class NetworkTest {
       // origin = 0, destination = 6
       {
         try {
-          int got = network.searchPathNum(0, 6);
-          assertEquals(4, got);
+          assertTrue(network.isConnected(0, 6));
         } catch (InvalidArguments e) {
           assertEquals("", e.toString());
         }
@@ -316,8 +309,7 @@ class NetworkTest {
       // origin = 0, destination = 7
       {
         try {
-          int got = network.searchPathNum(0, 7);
-          assertEquals(4, got);
+          assertTrue(network.isConnected(0, 7));
         } catch (InvalidArguments e) {
           assertEquals("", e.toString());
         }
@@ -326,8 +318,7 @@ class NetworkTest {
       // origin = 1, destination = 1
       {
         try {
-          int got = network.searchPathNum(1, 1);
-          assertEquals(0, got);
+          assertTrue(network.isConnected(1, 1));
         } catch (InvalidArguments e) {
           assertEquals("", e.toString());
         }
@@ -336,8 +327,7 @@ class NetworkTest {
       // origin = 1, destination = 2
       {
         try {
-          int got = network.searchPathNum(1, 2);
-          assertEquals(3, got);
+          assertTrue(network.isConnected(1, 2));
         } catch (InvalidArguments e) {
           assertEquals("", e.toString());
         }
@@ -346,8 +336,7 @@ class NetworkTest {
       // origin = 1, destination = 3
       {
         try {
-          int got = network.searchPathNum(1, 3);
-          assertEquals(3, got);
+          assertTrue(network.isConnected(1, 3));
         } catch (InvalidArguments e) {
           assertEquals("", e.toString());
         }
@@ -356,8 +345,7 @@ class NetworkTest {
       // origin = 1, destination = 4
       {
         try {
-          int got = network.searchPathNum(1, 4);
-          assertEquals(3, got);
+          assertTrue(network.isConnected(1, 4));
         } catch (InvalidArguments e) {
           assertEquals("", e.toString());
         }
@@ -366,8 +354,7 @@ class NetworkTest {
       // origin = 1, destination = 5
       {
         try {
-          int got = network.searchPathNum(1, 5);
-          assertEquals(3, got);
+          assertTrue(network.isConnected(1, 5));
         } catch (InvalidArguments e) {
           assertEquals("", e.toString());
         }
@@ -376,8 +363,7 @@ class NetworkTest {
       // origin = 1, destination = 6
       {
         try {
-          int got = network.searchPathNum(1, 6);
-          assertEquals(3, got);
+          assertTrue(network.isConnected(1, 6));
         } catch (InvalidArguments e) {
           assertEquals("", e.toString());
         }
@@ -386,8 +372,7 @@ class NetworkTest {
       // origin = 1, destination = 7
       {
         try {
-          int got = network.searchPathNum(1, 7);
-          assertEquals(3, got);
+          assertTrue(network.isConnected(1, 7));
         } catch (InvalidArguments e) {
           assertEquals("", e.toString());
         }
@@ -396,8 +381,7 @@ class NetworkTest {
       // exception
       {
         try {
-          int got = network.searchPathNum(-1, 1);
-          assertEquals(-1, got);
+          assertTrue(network.isConnected(-1, 1));
         } catch (InvalidArguments e) {
           assertEquals(
               "utils.exceptions.InvalidArguments: Invalid Argument : invalid origin vertex index (vertex index = -1)",
@@ -405,8 +389,7 @@ class NetworkTest {
         }
 
         try {
-          int got = network.searchPathNum(8, 1);
-          assertEquals(-1, got);
+          assertTrue(network.isConnected(8, 1));
         } catch (InvalidArguments e) {
           assertEquals(
               "utils.exceptions.InvalidArguments: Invalid Argument : invalid origin vertex index (vertex index = 8)",
@@ -414,8 +397,7 @@ class NetworkTest {
         }
 
         try {
-          int got = network.searchPathNum(5, -1);
-          assertEquals(-1, got);
+          assertTrue(network.isConnected(5, -1));
         } catch (InvalidArguments e) {
           assertEquals(
               "utils.exceptions.InvalidArguments: Invalid Argument : invalid destination vertex index (vertex index = -1)",
@@ -423,8 +405,7 @@ class NetworkTest {
         }
 
         try {
-          int got = network.searchPathNum(1, 8);
-          assertEquals(-1, got);
+          assertTrue(network.isConnected(5, 8));
         } catch (InvalidArguments e) {
           assertEquals(
               "utils.exceptions.InvalidArguments: Invalid Argument : invalid destination vertex index (vertex index = 8)",
@@ -477,8 +458,7 @@ class NetworkTest {
       // origin = 1, destination = 2
       {
         try {
-          int got = network.searchPathNum(1, 2);
-          assertEquals(2, got);
+          assertTrue(network.isConnected(1, 2));
         } catch (InvalidArguments e) {
           assertEquals("", e.toString());
         }
@@ -487,8 +467,7 @@ class NetworkTest {
       // origin = 1, destination = 3
       {
         try {
-          int got = network.searchPathNum(1, 3);
-          assertEquals(0, got);
+          assertFalse(network.isConnected(1, 3));
         } catch (InvalidArguments e) {
           assertEquals("", e.toString());
         }
@@ -497,8 +476,7 @@ class NetworkTest {
       // origin = 6, destination = 3
       {
         try {
-          int got = network.searchPathNum(6, 3);
-          assertEquals(2, got);
+          assertTrue(network.isConnected(6, 3));
         } catch (InvalidArguments e) {
           assertEquals("", e.toString());
         }
@@ -507,8 +485,7 @@ class NetworkTest {
       // origin = 6, destination = 0
       {
         try {
-          int got = network.searchPathNum(6, 0);
-          assertEquals(0, got);
+          assertFalse(network.isConnected(6, 0));
         } catch (InvalidArguments e) {
           assertEquals("", e.toString());
         }

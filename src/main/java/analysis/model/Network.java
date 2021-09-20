@@ -2,6 +2,8 @@ package analysis.model;
 
 import data.dto.LinkDto;
 import data.dto.NetworkDto;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import org.jetbrains.annotations.NotNull;
 import utils.exceptions.InvalidArguments;
@@ -90,14 +92,14 @@ public class Network extends CoreNetwork {
   }
 
   /**
-   * searchPathNum count origin-destination paths.
+   * isConnected check that origin-destination pair is connected.
    *
    * @param originVertexIndex origin vertex index
    * @param destinationVertexIndex destination vertex index
-   * @return #paths
+   * @return connected or not
    * @throws InvalidArguments invalid argument exception
    */
-  public int searchPathNum(final int originVertexIndex, final int destinationVertexIndex)
+  public boolean isConnected(final int originVertexIndex, final int destinationVertexIndex)
       throws InvalidArguments {
     if (originVertexIndex < 0 || originVertexIndex >= vertexNum) {
       throw new InvalidArguments(
@@ -111,7 +113,7 @@ public class Network extends CoreNetwork {
     }
 
     if (originVertexIndex == destinationVertexIndex) {
-      return 0;
+      return true;
     }
 
     LinkedList<Integer> stack =
@@ -120,35 +122,35 @@ public class Network extends CoreNetwork {
             add(originVertexIndex);
           }
         };
+    ArrayList<Integer> checked = new ArrayList<>(destinationVertexIndex);
 
-    return depthFirstSearch(stack, destinationVertexIndex, 0);
-  }
+    while (stack.size() > 0) {
+      int v = stack.peekLast();
+      int e = first[v];
+      boolean addedVertex = false;
 
-  private int depthFirstSearch(
-      final LinkedList<Integer> stack, final int destinationVertexIndex, int pathNum) {
-    if (stack == null || stack.size() == 0) {
-      return pathNum;
-    }
+      while (e > -1) {
+        int headV = heads[e];
 
-    int v = stack.peekLast();
-    int e = first[v];
+        if (headV == destinationVertexIndex) {
+          return true;
+        }
 
-    while (e > -1) {
-      int headV = heads[e];
+        if (!checked.contains(headV) && !stack.contains(headV)) {
+          stack.addLast(headV);
+          addedVertex = true;
+          break;
+        }
 
-      if (headV == destinationVertexIndex) {
-        pathNum++;
-      } else if (!stack.contains(headV)) {
-        stack.add(headV);
-        pathNum = depthFirstSearch(stack, destinationVertexIndex, pathNum);
+        e = adjList[e];
       }
 
-      e = adjList[e];
+      if (!addedVertex) {
+        checked.add(stack.pollLast());
+      }
     }
 
-    stack.pollLast();
-
-    return pathNum;
+    return false;
   }
 
   public Vertex[] getVertexes() {

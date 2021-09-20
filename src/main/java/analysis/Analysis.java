@@ -56,19 +56,25 @@ public class Analysis implements AnalysisInterface {
 
     for (int origin = 0; origin < network.getVertexNum(); origin++) {
       for (int destination = 0; destination < network.getVertexNum(); destination++) {
-        int pathNum;
+        if (origin == destination) {
+          continue;
+        }
+
+        boolean connected;
 
         try {
-          pathNum = network.searchPathNum(origin, destination);
+          connected = network.isConnected(origin, destination);
         } catch (InvalidArguments e) {
           logger.warning(e.toString());
 
           continue;
         }
 
-        for (int v = 0; v < network.getVertexNum(); v++) {
-          if (v != origin && v != destination) {
-            totalPaths[v] += pathNum;
+        if (connected) {
+          for (int v = 0; v < network.getVertexNum(); v++) {
+            if (v != origin && v != destination) {
+              totalPaths[v]++;
+            }
           }
         }
       }
@@ -137,6 +143,14 @@ public class Analysis implements AnalysisInterface {
         }
       }
     }
+  }
+
+  double[] getDegreeCentrality() {
+    return degreeCentrality;
+  }
+
+  double[] getVertexClosenessCentrality() {
+    return vertexClosenessCentrality;
   }
 
   @Override

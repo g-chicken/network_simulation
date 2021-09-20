@@ -48,7 +48,7 @@ public class Dijkstra extends CoreNetwork {
   }
 
   /**
-   * dijkstra calc shortest paths.
+   * dijkstra calc the shortest paths.
    *
    * @param startVertexIndex vertex index of start
    */
@@ -105,6 +105,7 @@ public class Dijkstra extends CoreNetwork {
   /**
    * getPathList create path lists from this.paths. this method expected executed after dijkstra
    * method.
+   * if weights are all 0, this method cause overflow.
    *
    * @param destinationVertexIndex destination
    * @return path list
@@ -133,16 +134,15 @@ public class Dijkstra extends CoreNetwork {
       final LinkedList<Integer> path,
       final LinkedList<LinkedList<Integer>> pathList) {
     if (paths.get(vertexIndex).size() == 0) {
-      Collections.reverse(path);
       pathList.addLast(new LinkedList<>(path));
 
       return;
     }
 
     for (Integer linkIndex : paths.get(vertexIndex)) {
-      path.addLast(linkIndex);
+      path.addFirst(linkIndex);
       scanPaths(tails[linkIndex], path, pathList);
-      path.pollLast();
+      path.pollFirst();
     }
   }
 
