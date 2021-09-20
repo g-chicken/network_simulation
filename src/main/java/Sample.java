@@ -28,7 +28,7 @@ public class Sample {
     System.out.println("\nanalysis");
     AnalysisInterface analysis = new Analysis(dto);
     analysis.calcDegreeCentrality();
-    analysis.calcClosenessCentrality();
+    analysis.calcVertexClosenessCentrality();
     System.out.println(analysis.getAnalysisResult());
   }
 }

@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jetbrains.annotations.NotNull;
 import utils.StdOutHandler;
 import utils.exceptions.DoNotExecution;
 import utils.exceptions.InvalidArguments;
@@ -50,8 +51,22 @@ public class Analysis implements AnalysisInterface {
   }
 
   @Override
-  public void calcClosenessCentrality() {
+  public void calcVertexClosenessCentrality() {
+    Arrays.fill(vertexClosenessCentrality, 0.0);
+
     Dijkstra dijkstra = new Dijkstra(network);
+    calcNumeratorOfVertexClosenessCentrality(dijkstra);
+
+    int[] totalPaths = calcPathsNumForVertexClosenessCentrality();
+
+    for (int v = 0; v < network.getVertexNum(); v++) {
+      vertexClosenessCentrality[v] /= totalPaths[v];
+    }
+
+    logger.info("calculated closeness centrality");
+  }
+
+  private int @NotNull [] calcPathsNumForVertexClosenessCentrality() {
     int[] totalPaths = new int[network.getVertexNum()];
 
     for (int origin = 0; origin < network.getVertexNum(); origin++) {
@@ -80,18 +95,10 @@ public class Analysis implements AnalysisInterface {
       }
     }
 
-    calcVertexClosenessCentrality(dijkstra);
-
-    for (int v = 0; v < network.getVertexNum(); v++) {
-      vertexClosenessCentrality[v] /= totalPaths[v];
-    }
-
-    logger.info("calculated closeness centrality");
+    return totalPaths;
   }
 
-  private void calcVertexClosenessCentrality(final Dijkstra dijkstra) {
-    Arrays.fill(vertexClosenessCentrality, 0.0);
-
+  private void calcNumeratorOfVertexClosenessCentrality(final Dijkstra dijkstra) {
     for (int originVertexIndex = 0;
         originVertexIndex < network.getVertexNum();
         originVertexIndex++) {

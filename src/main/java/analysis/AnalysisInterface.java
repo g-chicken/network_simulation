@@ -5,8 +5,8 @@ public interface AnalysisInterface {
   /** calcDegreeCentrality calc the degree centrality for the network. */
   void calcDegreeCentrality();
 
-  /** calcClosenessCentrality calc the closeness centrality for the network. */
-  void calcClosenessCentrality();
+  /** calcVertexClosenessCentrality calc the closeness centrality for the vertexes. */
+  void calcVertexClosenessCentrality();
 
   /**
    * getAnalysisResult get the result of analysis of network.

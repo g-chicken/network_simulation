@@ -66,7 +66,7 @@ class AnalysisTest {
   }
 
   @Test
-  void calcClosenessCentrality() {
+  void calcVertexClosenessCentrality() {
     // 4-complete-graph (K_4)
     {
       VertexDto[] vertexDtoes =
@@ -94,7 +94,7 @@ class AnalysisTest {
       String label = "K_4";
       NetworkDto networkDto = new NetworkDto(vertexDtoes, linkDtoes, label);
       Analysis analysis = new Analysis(networkDto);
-      analysis.calcClosenessCentrality();
+      analysis.calcVertexClosenessCentrality();
 
       double[] want = new double[] {0.0, 0.0, 0.0, 0.0};
       double[] got = analysis.getVertexClosenessCentrality();
@@ -142,7 +142,7 @@ class AnalysisTest {
       String label = "K_5";
       NetworkDto networkDto = new NetworkDto(vertexDtoes, linkDtoes, label);
       Analysis analysis = new Analysis(networkDto);
-      analysis.calcClosenessCentrality();
+      analysis.calcVertexClosenessCentrality();
 
       double[] want = new double[] {0.0, 0.0, 0.0, 0.0, 0.0};
       double[] got = analysis.getVertexClosenessCentrality();
@@ -167,7 +167,7 @@ class AnalysisTest {
       String label = "independent_set";
       NetworkDto networkDto = new NetworkDto(vertexDtoes, linkDtoes, label);
       Analysis analysis = new Analysis(networkDto);
-      analysis.calcClosenessCentrality();
+      analysis.calcVertexClosenessCentrality();
 
       double[] want = new double[] {NaN, NaN, NaN, NaN};
       double[] got = analysis.getVertexClosenessCentrality();
@@ -197,7 +197,7 @@ class AnalysisTest {
       String label = "path";
       NetworkDto networkDto = new NetworkDto(vertexDtoes, linkDtoes, label);
       Analysis analysis = new Analysis(networkDto);
-      analysis.calcClosenessCentrality();
+      analysis.calcVertexClosenessCentrality();
 
       double[] want = new double[] {0.0, 1.0, 0.0};
       double[] got = analysis.getVertexClosenessCentrality();
@@ -230,7 +230,7 @@ class AnalysisTest {
       String label = "path";
       NetworkDto networkDto = new NetworkDto(vertexDtoes, linkDtoes, label);
       Analysis analysis = new Analysis(networkDto);
-      analysis.calcClosenessCentrality();
+      analysis.calcVertexClosenessCentrality();
 
       double[] want = new double[] {0.0, 4.0 / 6.0, 4.0 / 6.0, 0.0};
       double[] got = analysis.getVertexClosenessCentrality();
@@ -284,7 +284,7 @@ class AnalysisTest {
       String label = "network";
       NetworkDto networkDto = new NetworkDto(vertexDtoes, linkDtoes, label);
       Analysis analysis = new Analysis(networkDto);
-      analysis.calcClosenessCentrality();
+      analysis.calcVertexClosenessCentrality();
 
       double[] want =
           new double[] {0.0, 10.0 / 30.0, 18.0 / 30.0, 4.0 / 30.0, 0.0, 4.0 / 30.0, 0.0};
@@ -331,7 +331,7 @@ class AnalysisTest {
       String label = "network";
       NetworkDto networkDto = new NetworkDto(vertexDtoes, linkDtoes, label);
       Analysis analysis = new Analysis(networkDto);
-      analysis.calcClosenessCentrality();
+      analysis.calcVertexClosenessCentrality();
 
       double[] want = new double[] {0.0, 4.0 / 12.0, 0.0, 0.0, 0.0, 6.0 / 12.0, 5.0 / 13.0, 0.0};
       double[] got = analysis.getVertexClosenessCentrality();
