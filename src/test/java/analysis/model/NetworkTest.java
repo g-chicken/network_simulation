@@ -5,6 +5,7 @@ import data.dto.NetworkDto;
 import data.dto.VertexDto;
 import org.junit.jupiter.api.Test;
 import utils.exceptions.InvalidArguments;
+import utils.mathematics.Coordination;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,35 +19,35 @@ class NetworkTest {
     //   4 --(6:1)-- 5 --(7:2)-- 6 --(8:3)-- 7
     Vertex[] vertices =
         new Vertex[] {
-          new Vertex(1.0, 0.1, "0"),
-          new Vertex(2.0, 0.2, "1"),
-          new Vertex(3.0, 0.3, "2"),
-          new Vertex(4.0, 0.4, "3"),
-          new Vertex(5.0, 0.5, "4"),
-          new Vertex(6.0, 0.6, "5"),
-          new Vertex(7.0, 0.7, "6"),
-          new Vertex(8.0, 0.8, "7"),
+            new Vertex("0"),
+            new Vertex("1"),
+            new Vertex("2"),
+            new Vertex("3"),
+            new Vertex("4"),
+            new Vertex("5"),
+            new Vertex("6"),
+            new Vertex("7"),
         };
     Link[] links =
         new Link[] {
-          new Link("0"),
-          new Link("1"),
-          new Link("2"),
-          new Link("3"),
-          new Link("4"),
-          new Link("5"),
-          new Link("6"),
-          new Link("7"),
-          new Link("8"),
-          new Link("9"),
-          new Link("10"),
-          new Link("11"),
-          new Link("12"),
-          new Link("13"),
-          new Link("14"),
-          new Link("15"),
-          new Link("16"),
-          new Link("17"),
+            new Link("0"),
+            new Link("1"),
+            new Link("2"),
+            new Link("3"),
+            new Link("4"),
+            new Link("5"),
+            new Link("6"),
+            new Link("7"),
+            new Link("8"),
+            new Link("9"),
+            new Link("10"),
+            new Link("11"),
+            new Link("12"),
+            new Link("13"),
+            new Link("14"),
+            new Link("15"),
+            new Link("16"),
+            new Link("17"),
         };
     int[] tails = new int[] {0, 1, 1, 2, 2, 3, 0, 4, 1, 5, 2, 6, 4, 5, 5, 6, 6, 7};
     int[] heads = new int[] {1, 0, 2, 1, 3, 2, 4, 0, 5, 1, 6, 2, 5, 4, 6, 5, 7, 6};
@@ -86,8 +87,7 @@ class NetworkTest {
       VertexDto[] vertexDtoes = new VertexDto[8];
       for (int i = 0; i < 8; i++) {
         vertexDtoes[i] =
-            new VertexDto(
-                vertices[i].getCoordinateX(), vertices[i].getCoordinateY(), vertices[i].getLabel());
+            new VertexDto(new Coordination(0.0, 0.0), vertices[i].label());
       }
 
       LinkDto[] linkDtoes = new LinkDto[18];
@@ -130,35 +130,35 @@ class NetworkTest {
     //   4 --(6:1)-- 5 --(7:2)-- 6 --(8:3)-- 7
     Vertex[] vertices =
         new Vertex[] {
-          new Vertex(1.0, 0.1, "0"),
-          new Vertex(2.0, 0.2, "1"),
-          new Vertex(3.0, 0.3, "2"),
-          new Vertex(4.0, 0.4, "3"),
-          new Vertex(5.0, 0.5, "4"),
-          new Vertex(6.0, 0.6, "5"),
-          new Vertex(7.0, 0.7, "6"),
-          new Vertex(8.0, 0.8, "7"),
+            new Vertex("0"),
+            new Vertex("1"),
+            new Vertex("2"),
+            new Vertex("3"),
+            new Vertex("4"),
+            new Vertex("5"),
+            new Vertex("6"),
+            new Vertex("7"),
         };
     Link[] links =
         new Link[] {
-          new Link("0"),
-          new Link("1"),
-          new Link("2"),
-          new Link("3"),
-          new Link("4"),
-          new Link("5"),
-          new Link("6"),
-          new Link("7"),
-          new Link("8"),
-          new Link("9"),
-          new Link("10"),
-          new Link("11"),
-          new Link("12"),
-          new Link("13"),
-          new Link("14"),
-          new Link("15"),
-          new Link("16"),
-          new Link("17"),
+            new Link("0"),
+            new Link("1"),
+            new Link("2"),
+            new Link("3"),
+            new Link("4"),
+            new Link("5"),
+            new Link("6"),
+            new Link("7"),
+            new Link("8"),
+            new Link("9"),
+            new Link("10"),
+            new Link("11"),
+            new Link("12"),
+            new Link("13"),
+            new Link("14"),
+            new Link("15"),
+            new Link("16"),
+            new Link("17"),
         };
     int[] tails = new int[] {0, 1, 1, 2, 2, 3, 0, 4, 1, 5, 2, 6, 4, 5, 5, 6, 6, 7};
     int[] heads = new int[] {1, 0, 2, 1, 3, 2, 4, 0, 5, 1, 6, 2, 5, 4, 6, 5, 7, 6};
@@ -204,35 +204,35 @@ class NetworkTest {
     {
       Vertex[] vertices =
           new Vertex[] {
-            new Vertex(1.0, 0.1, "0"),
-            new Vertex(2.0, 0.2, "1"),
-            new Vertex(3.0, 0.3, "2"),
-            new Vertex(4.0, 0.4, "3"),
-            new Vertex(5.0, 0.5, "4"),
-            new Vertex(6.0, 0.6, "5"),
-            new Vertex(7.0, 0.7, "6"),
-            new Vertex(8.0, 0.8, "7"),
+              new Vertex("0"),
+              new Vertex("1"),
+              new Vertex("2"),
+              new Vertex("3"),
+              new Vertex("4"),
+              new Vertex("5"),
+              new Vertex("6"),
+              new Vertex("7"),
           };
       Link[] links =
           new Link[] {
-            new Link("0"),
-            new Link("1"),
-            new Link("2"),
-            new Link("3"),
-            new Link("4"),
-            new Link("5"),
-            new Link("6"),
-            new Link("7"),
-            new Link("8"),
-            new Link("9"),
-            new Link("10"),
-            new Link("11"),
-            new Link("12"),
-            new Link("13"),
-            new Link("14"),
-            new Link("15"),
-            new Link("16"),
-            new Link("17"),
+              new Link("0"),
+              new Link("1"),
+              new Link("2"),
+              new Link("3"),
+              new Link("4"),
+              new Link("5"),
+              new Link("6"),
+              new Link("7"),
+              new Link("8"),
+              new Link("9"),
+              new Link("10"),
+              new Link("11"),
+              new Link("12"),
+              new Link("13"),
+              new Link("14"),
+              new Link("15"),
+              new Link("16"),
+              new Link("17"),
           };
       int[] tails = new int[] {0, 1, 1, 2, 2, 3, 0, 4, 1, 5, 2, 6, 4, 5, 5, 6, 6, 7};
       int[] heads = new int[] {1, 0, 2, 1, 3, 2, 4, 0, 5, 1, 6, 2, 5, 4, 6, 5, 7, 6};
@@ -422,30 +422,30 @@ class NetworkTest {
     {
       Vertex[] vertices =
           new Vertex[] {
-            new Vertex(1.0, 0.1, "0"),
-            new Vertex(2.0, 0.2, "1"),
-            new Vertex(3.0, 0.3, "2"),
-            new Vertex(4.0, 0.4, "3"),
-            new Vertex(5.0, 0.5, "4"),
-            new Vertex(6.0, 0.6, "5"),
-            new Vertex(7.0, 0.7, "6"),
+              new Vertex("0"),
+              new Vertex("1"),
+              new Vertex("2"),
+              new Vertex("3"),
+              new Vertex("4"),
+              new Vertex("5"),
+              new Vertex("6"),
           };
       Link[] links =
           new Link[] {
-            new Link("0"),
-            new Link("1"),
-            new Link("2"),
-            new Link("3"),
-            new Link("4"),
-            new Link("5"),
-            new Link("6"),
-            new Link("7"),
-            new Link("8"),
-            new Link("9"),
-            new Link("10"),
-            new Link("11"),
-            new Link("12"),
-            new Link("13"),
+              new Link("0"),
+              new Link("1"),
+              new Link("2"),
+              new Link("3"),
+              new Link("4"),
+              new Link("5"),
+              new Link("6"),
+              new Link("7"),
+              new Link("8"),
+              new Link("9"),
+              new Link("10"),
+              new Link("11"),
+              new Link("12"),
+              new Link("13"),
           };
       int[] tails = new int[] {0, 1, 0, 2, 1, 2, 3, 4, 3, 5, 4, 6, 5, 6};
       int[] heads = new int[] {1, 0, 2, 0, 2, 1, 4, 3, 5, 3, 6, 4, 6, 5};

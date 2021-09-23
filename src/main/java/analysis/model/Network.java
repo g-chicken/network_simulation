@@ -51,7 +51,7 @@ public class Network extends CoreNetwork {
 
     vertexes = new Vertex[networkDto.getVertexNum()];
     for (int i = 0; i < networkDto.getVertexNum(); i++) {
-      vertexes[i] = new Vertex(networkDto.vertexDtoes()[i]);
+      vertexes[i] = new Vertex(networkDto.vertexDtoes()[i].label());
     }
 
     links = new Link[networkDto.getLinkNum()];

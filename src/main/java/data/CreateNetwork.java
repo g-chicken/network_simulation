@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import utils.StdOutHandler;
 import utils.exceptions.InvalidArguments;
+import utils.mathematics.Coordination;
 
 /** CreateNetwork implements CreateNetworkInterface. */
 public class CreateNetwork implements CreateNetworkInterface {
@@ -37,10 +38,8 @@ public class CreateNetwork implements CreateNetworkInterface {
     VertexDto[] vertexDtoes = new VertexDto[vertexNum];
 
     for (int i = 0; i < vertexNum; i++) {
-      double x = random.nextDouble();
-      double y = random.nextDouble();
-
-      vertexDtoes[i] = new VertexDto(x, y, String.valueOf(i));
+      Coordination c = new Coordination(random.nextDouble(), random.nextDouble());
+      vertexDtoes[i] = new VertexDto(c, String.valueOf(i));
     }
 
     LinkDto[] linkDtoes = new LinkDto[linkNum];

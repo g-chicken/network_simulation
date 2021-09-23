@@ -1,23 +1,22 @@
 package data.dto;
 
+import utils.exceptions.InvalidArguments;
+import utils.mathematics.Coordination;
+
 /**
  * VertexDto is dto of network's vertex.
  *
- * @param x coordinate x
- * @param y coordinate y
+ * @param c     Coordination
  * @param label label
  */
-public record VertexDto(double x, double y, String label) {
+public record VertexDto(Coordination c, String label) {
   /**
    * distance calculates the distance between this and the v.
    *
    * @param v other vertex
    * @return distance between this and the v.
    */
-  public double distance(@org.jetbrains.annotations.NotNull VertexDto v) {
-    double subX = this.x - v.x;
-    double subY = this.y - v.y;
-
-    return Math.sqrt(subX * subX + subY * subY);
+  public double distance(VertexDto v) throws InvalidArguments {
+    return c.distance(v.c);
   }
 }
