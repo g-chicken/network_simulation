@@ -1,5 +1,7 @@
 package drawing.model;
 
+import data.dto.LinkDto;
+import data.dto.NetworkDto;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,10 +32,87 @@ public class Network extends CoreNetwork {
     this.vertexes = vertices;
     this.links = links;
     this.label = label;
-    this.constant = Math.sqrt(1.0 / this.vertexes.length);
+
+    constant = Math.sqrt(1.0 / this.vertexes.length);
     range = 0.0;
     random = new Random(System.currentTimeMillis());
+    logger.addHandler(new StdOutHandler());
+    logger.setUseParentHandlers(false);
+    logger.setLevel(Level.INFO);
+  }
 
+  /**
+   * constructor.
+   *
+   * @param networkDto the network DTO
+   */
+  public Network(final @NotNull NetworkDto networkDto) {
+    super(networkDto.getVertexNum(), networkDto.getLinkNum());
+
+    vertexes = new Vertex[this.getVertexNum()];
+    for (int i = 0; i < this.getVertexNum(); i++) {
+      vertexes[i] =
+          new Vertex(networkDto.vertexDtoes()[i].c(), networkDto.vertexDtoes()[i].label());
+    }
+
+    links = new Link[this.getLinkNum()];
+    for (int i = 0; i < this.getLinkNum(); i++) {
+      LinkDto dto = networkDto.linkDtoes()[i];
+      links[i] = new Link(0.0, dto.label());
+      tails[i] = dto.tailVertexIndex();
+      heads[i] = dto.headVertexIndex();
+      weights[i] = dto.weight();
+    }
+
+    label = networkDto.label();
+
+    setAdjacencyList();
+
+    constant = Math.sqrt(1.0 / this.vertexes.length);
+    range = 0.0;
+    random = new Random(System.currentTimeMillis());
+    logger.addHandler(new StdOutHandler());
+    logger.setUseParentHandlers(false);
+    logger.setLevel(Level.INFO);
+  }
+
+  /**
+   * constructor.
+   *
+   * @param network    the network of analysis model
+   * @param vertexRate vertex rate (0 <= vertexRate <= 1) (for example, closeness centrality for the vertex)
+   * @param linkRate   link rate (0 <= linkRate <= 1) (for example, closeness centrality for the link)
+   */
+  public Network(final analysis.model.@NotNull Network network, final double[] vertexRate,
+                 final double[] linkRate) {
+    super(network.getVertexNum(), network.getLinkNum(), network.getTails(), network.getHeads(),
+        network.getWeights(), network.getFirst(), network.getAdjList());
+
+    vertexes = new Vertex[this.getVertexNum()];
+    for (int i = 0; i < this.getVertexNum(); i++) {
+      double rate = 0.0;
+      if (vertexRate != null && vertexRate.length > i) {
+        rate = vertexRate[i];
+      }
+
+      vertexes[i] = new Vertex(rate, network.getVertexes()[i].label());
+    }
+
+    links = new Link[this.getLinkNum()];
+    for (int i = 0; i < this.getLinkNum(); i++) {
+      double rate = 0.0;
+      if (linkRate != null && linkRate.length > i) {
+        rate = linkRate[i];
+      }
+
+      links[i] = new Link(rate, network.getLinks()[i].label());
+    }
+
+    this.label = network.getLabel();
+
+    constant = Math.sqrt(1.0 / this.getVertexNum());
+    range = 0.0;
+    random = new Random(System.currentTimeMillis());
     logger.addHandler(new StdOutHandler());
     logger.setUseParentHandlers(false);
     logger.setLevel(Level.INFO);
@@ -46,10 +125,14 @@ public class Network extends CoreNetwork {
   public void setVertexCoordination() {
     initializeCoordination();
 
+    if (vertexNum < 2) {
+      return;
+    }
+
     for (int i = 0; i < vertexNum * vertexNum + linkNum; i++) {
       try {
         fruchtermanReingold();
-        range = Math.max(0.0, range - range / (i + 1.0));
+        range -= range / (i + 1.0);
       } catch (DoNotExecution e) {
         logger.severe(e.toString());
         System.exit(1);
@@ -199,5 +282,17 @@ public class Network extends CoreNetwork {
 
   private double repulsion(final double distance) {
     return constant * constant / distance;
+  }
+
+  Vertex[] getVertexes() {
+    return vertexes;
+  }
+
+  Link[] getLinks() {
+    return links;
+  }
+
+  String getLabel() {
+    return label;
   }
 }

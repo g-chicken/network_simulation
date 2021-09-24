@@ -91,4 +91,9 @@ public class Coordination {
   public void setCoordinateY(double coordinateY) {
     this.coordinateY = coordinateY;
   }
+
+  @Override
+  public String toString() {
+    return String.format("(%36.15f, %36.15f)", coordinateX, coordinateY);
+  }
 }

@@ -10,15 +10,18 @@ public class Vertex {
   private final double rate;
   private final String label;
 
-  Vertex(final double coordinateX, final double coordinateY, final double rate,
-         final String label) {
-    coordination = new Coordination(coordinateX, coordinateY);
+  Vertex(final Coordination coordination, final double rate, final String label) {
+    this.coordination = coordination;
     this.rate = rate;
     this.label = label;
   }
 
   public Vertex(final double rate, final String label) {
-    this(-1, -1, rate, label);
+    this(new Coordination(0.0, 0.0), rate, label);
+  }
+
+  public Vertex(final Coordination coordination, final String label) {
+    this(coordination, 0.0, label);
   }
 
   boolean equalCoordination(final Coordination c) {
@@ -44,5 +47,11 @@ public class Vertex {
 
   public String getLabel() {
     return label;
+  }
+
+  @Override
+  public String toString() {
+    return String.format("(coordination, rate, label) = (%s, %12.10f, %s)",
+        coordination, rate, label);
   }
 }

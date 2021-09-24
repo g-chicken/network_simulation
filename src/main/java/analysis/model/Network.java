@@ -160,6 +160,10 @@ public class Network extends CoreNetwork {
     return links;
   }
 
+  public String getLabel() {
+    return label;
+  }
+
   @Override
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder(String.format("label = %s\n", label));
