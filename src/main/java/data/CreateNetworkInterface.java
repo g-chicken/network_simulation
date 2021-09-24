@@ -1,20 +1,17 @@
 package data;
 
 import data.dto.NetworkDto;
-import utils.exceptions.InvalidArguments;
+import utils.exceptions.DoNotExecution;
 
 /**
  * CreateNetworkInterface define to create a network.
  */
 public interface CreateNetworkInterface {
   /**
-   * undirectedRandom create a random network.
-   * the network does not have self loop.
-   * do not set capacity of all links.
+   * createNetwork create the network.
    *
-   * @param vertexNum #vertexes
-   * @param linkNum #links
-   * @return a random network
+   * @return NetworkDto
+   * @throws DoNotExecution do not execution exception
    */
-  NetworkDto undirectedRandom(final int vertexNum, final int linkNum) throws InvalidArguments;
+  NetworkDto createNetwork() throws DoNotExecution;
 }
