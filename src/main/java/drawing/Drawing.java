@@ -113,7 +113,7 @@ public class Drawing extends JFrame implements DrawingInterface {
         int rg = (int) (64 * Math.max(0, 1 - vertex.getRate() * 8));
         int alpha = 30 + (int) (220 * vertex.getRate());
 
-        g.setColor(new Color(rg, rg, 127, alpha));
+        g.setColor(new Color(rg, rg, 172, alpha));
         g.fillOval(
             (int) (vertex.getCoordination().getCoordinateX()
                 * (getWidth() - PADDING * 2)) - VERTEX_RADIUS + PADDING,
