@@ -248,12 +248,18 @@ public class Analysis implements AnalysisInterface {
     return degreeCentrality;
   }
 
-  double[] getVertexClosenessCentrality() {
+  @Override
+  public double[] getVertexClosenessCentrality() {
     return vertexClosenessCentrality;
   }
 
-  double[] getLinkClosenessCentrality() {
+  @Override
+  public double[] getLinkClosenessCentrality() {
     return linkClosenessCentrality;
+  }
+
+  public Network getNetwork() {
+    return network;
   }
 
   @Override

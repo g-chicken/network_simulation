@@ -3,6 +3,8 @@ import analysis.AnalysisInterface;
 import data.CreateNetwork;
 import data.CreateNetworkInterface;
 import data.dto.NetworkDto;
+import drawing.Drawing;
+import drawing.DrawingInterface;
 import utils.exceptions.InvalidArguments;
 
 public class Sample {
@@ -15,21 +17,20 @@ public class Sample {
 
     NetworkDto dto;
     try {
-      dto = createNetworkInterface.undirectedRandom(10, 16);
+      dto = createNetworkInterface.undirectedRandom(50, 200);
     } catch (InvalidArguments e) {
       e.printStackTrace();
 
       return;
     }
 
-    System.out.println("dto");
-    System.out.println(dto);
-
-    System.out.println("\nanalysis");
     AnalysisInterface analysis = new Analysis(dto);
     analysis.calcDegreeCentrality();
     analysis.calcVertexClosenessCentrality();
     analysis.calcLinkClosenessCentrality();
-    System.out.println(analysis.getAnalysisResult());
+
+    DrawingInterface drawing = new Drawing(analysis);
+    drawing.setVertexCoordination();
+    drawing.showNetwork();
   }
 }

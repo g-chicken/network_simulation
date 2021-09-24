@@ -16,6 +16,7 @@ import utils.network.CoreNetwork;
  * Network express a network to draw.
  */
 public class Network extends CoreNetwork {
+  private static final double ALPHA = 0.9999;
   private static final Logger logger = Logger.getLogger(Network.class.getName());
   private final Vertex[] vertexes;
   private final Link[] links;
@@ -33,7 +34,7 @@ public class Network extends CoreNetwork {
     this.links = links;
     this.label = label;
 
-    constant = Math.sqrt(1.0 / this.vertexes.length);
+    constant = Math.sqrt(100.0 / this.vertexes.length);
     range = 0.0;
     random = new Random(System.currentTimeMillis());
     logger.addHandler(new StdOutHandler());
@@ -80,8 +81,8 @@ public class Network extends CoreNetwork {
    * constructor.
    *
    * @param network    the network of analysis model
-   * @param vertexRate vertex rate (0 <= vertexRate <= 1) (for example, closeness centrality for the vertex)
-   * @param linkRate   link rate (0 <= linkRate <= 1) (for example, closeness centrality for the link)
+   * @param vertexRate vertex rate (0 <= vertexRate <= 1)
+   * @param linkRate   link rate (0 <= linkRate <= 1)
    */
   public Network(final analysis.model.@NotNull Network network, final double[] vertexRate,
                  final double[] linkRate) {
@@ -125,14 +126,16 @@ public class Network extends CoreNetwork {
   public void setVertexCoordination() {
     initializeCoordination();
 
+    double initRange = range;
+
     if (vertexNum < 2) {
       return;
     }
 
-    for (int i = 0; i < vertexNum * vertexNum + linkNum; i++) {
+    for (int i = 0; i < vertexNum * vertexNum + linkNum * linkNum / 2; i++) {
       try {
         fruchtermanReingold();
-        range -= range / (i + 1.0);
+        range = initRange * Math.pow(ALPHA, i);
       } catch (DoNotExecution e) {
         logger.severe(e.toString());
         System.exit(1);
@@ -227,6 +230,11 @@ public class Network extends CoreNetwork {
         }
 
         Coordination coordinationJ = vertexes[j].getCoordination();
+
+        if (coordinationI.equals(coordinationJ)) {
+          continue;
+        }
+
         Coordination delta = new Coordination(
             coordinationI.getCoordinateX() - coordinationJ.getCoordinateX(),
             coordinationI.getCoordinateY() - coordinationJ.getCoordinateY());
@@ -254,8 +262,18 @@ public class Network extends CoreNetwork {
     for (int e = 0; e < linkNum; e++) {
       int tailVertexIndex = tails[e];
       int headVertexIndex = heads[e];
+
+      if (tailVertexIndex == headVertexIndex) {
+        continue;
+      }
+
       Coordination tailCoordination = vertexes[tailVertexIndex].getCoordination();
       Coordination headCoordination = vertexes[headVertexIndex].getCoordination();
+
+      if (tailCoordination.equals(headCoordination)) {
+        continue;
+      }
+
       Coordination delta = new Coordination(
           tailCoordination.getCoordinateX() - headCoordination.getCoordinateX(),
           tailCoordination.getCoordinateY() - headCoordination.getCoordinateY());
@@ -284,7 +302,7 @@ public class Network extends CoreNetwork {
     return constant * constant / distance;
   }
 
-  Vertex[] getVertexes() {
+  public Vertex[] getVertexes() {
     return vertexes;
   }
 

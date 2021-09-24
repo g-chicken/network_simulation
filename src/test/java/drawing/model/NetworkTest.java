@@ -411,9 +411,9 @@ class NetworkTest {
 
       assertEquals(1, network.getVertexNum());
       assertEquals(1, network.getVertexes().length);
-      assertTrue(network.getVertexes()[0].getCoordination().getCoordinateX() < 1.0);
+      assertTrue(network.getVertexes()[0].getCoordination().getCoordinateX() <= 1.0);
       assertTrue(network.getVertexes()[0].getCoordination().getCoordinateX() >= 0.0);
-      assertTrue(network.getVertexes()[0].getCoordination().getCoordinateY() < 1.0);
+      assertTrue(network.getVertexes()[0].getCoordination().getCoordinateY() <= 1.0);
       assertTrue(network.getVertexes()[0].getCoordination().getCoordinateY() >= 0.0);
     }
 
@@ -441,9 +441,9 @@ class NetworkTest {
       assertEquals(2, network.getVertexes().length);
 
       for (int i = 0; i < 2; i++) {
-        assertTrue(network.getVertexes()[i].getCoordination().getCoordinateX() < 1.0);
+        assertTrue(network.getVertexes()[i].getCoordination().getCoordinateX() <= 1.0);
         assertTrue(network.getVertexes()[i].getCoordination().getCoordinateX() >= 0.0);
-        assertTrue(network.getVertexes()[i].getCoordination().getCoordinateY() < 1.0);
+        assertTrue(network.getVertexes()[i].getCoordination().getCoordinateY() <= 1.0);
         assertTrue(network.getVertexes()[i].getCoordination().getCoordinateY() >= 0.0);
       }
     }
@@ -477,9 +477,9 @@ class NetworkTest {
       assertEquals(3, network.getVertexes().length);
 
       for (int i = 0; i < 3; i++) {
-        assertTrue(network.getVertexes()[i].getCoordination().getCoordinateX() < 1.0);
+        assertTrue(network.getVertexes()[i].getCoordination().getCoordinateX() <= 1.0);
         assertTrue(network.getVertexes()[i].getCoordination().getCoordinateX() >= 0.0);
-        assertTrue(network.getVertexes()[i].getCoordination().getCoordinateY() < 1.0);
+        assertTrue(network.getVertexes()[i].getCoordination().getCoordinateY() <= 1.0);
         assertTrue(network.getVertexes()[i].getCoordination().getCoordinateY() >= 0.0);
       }
     }

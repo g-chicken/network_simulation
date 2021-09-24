@@ -10,12 +10,16 @@ import utils.StdOutHandler;
 import utils.exceptions.InvalidArguments;
 import utils.mathematics.Coordination;
 
-/** CreateNetwork implements CreateNetworkInterface. */
+/**
+ * CreateNetwork implements CreateNetworkInterface.
+ */
 public class CreateNetwork implements CreateNetworkInterface {
   private static final Logger logger = Logger.getLogger(CreateNetwork.class.getName());
   private final Random random;
 
-  /** CreateNetwork is constructor. */
+  /**
+   * CreateNetwork is constructor.
+   */
   public CreateNetwork() {
     this.random = new Random(System.currentTimeMillis());
 
@@ -35,6 +39,10 @@ public class CreateNetwork implements CreateNetworkInterface {
       throw new InvalidArguments("link size must be even number.");
     }
 
+    if (linkNum > vertexNum * (vertexNum - 1)) {
+      throw new InvalidArguments("link size is more than #vertexes * (#vertexes - 1)");
+    }
+
     VertexDto[] vertexDtoes = new VertexDto[vertexNum];
 
     for (int i = 0; i < vertexNum; i++) {
@@ -45,10 +53,28 @@ public class CreateNetwork implements CreateNetworkInterface {
     LinkDto[] linkDtoes = new LinkDto[linkNum];
 
     for (int i = 0; i < linkNum / 2; i++) {
-      int t = random.nextInt(vertexNum);
-      int h = t;
-      while (h == t) {
-        h = random.nextInt(vertexNum);
+      int t = 0;
+      int h = 0;
+      boolean alreadyExist = true;
+
+      while (alreadyExist) {
+        alreadyExist = false;
+        t = random.nextInt(vertexNum);
+        h = t;
+
+        while (h == t) {
+          h = random.nextInt(vertexNum);
+        }
+
+        for (int j = 0; j < i * 2; j++) {
+          int tail = linkDtoes[j].tailVertexIndex();
+          int head = linkDtoes[j].headVertexIndex();
+
+          if (t == tail && h == head) {
+            alreadyExist = true;
+            break;
+          }
+        }
       }
 
       linkDtoes[i * 2] =
