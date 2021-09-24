@@ -306,7 +306,7 @@ public class Network extends CoreNetwork {
     return vertexes;
   }
 
-  Link[] getLinks() {
+  public Link[] getLinks() {
     return links;
   }
 

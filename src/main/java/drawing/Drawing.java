@@ -1,6 +1,5 @@
 package drawing;
 
-import analysis.Analysis;
 import analysis.AnalysisInterface;
 import data.dto.NetworkDto;
 import drawing.model.Network;
@@ -19,6 +18,9 @@ import org.jetbrains.annotations.NotNull;
 public class Drawing extends JFrame implements DrawingInterface {
   private static final int WIDTH = 800;
   private static final int HEIGHT = 600;
+  private static final int PADDING = 10;
+  private static final int VERTEX_RADIUS = 4;
+
   private final Network network;
 
   /**
@@ -73,42 +75,52 @@ public class Drawing extends JFrame implements DrawingInterface {
       g.setColor(Color.WHITE);
       g.fillRect(0, 0, getWidth(), getHeight());
 
-      g.setColor(Color.GRAY);
       for (int i = 0; i < network.getLinkNum(); i++) {
         int tail = network.getTails()[i];
         int head = network.getHeads()[i];
+        double rate = network.getLinks()[i].rate();
+        int gb = (int) (127 * Math.max(0, 1 - rate * 8));
+        int alpha = 30 + (int) (220 * rate);
 
+        g.setColor(new Color(127, gb, gb, alpha));
         g.drawLine(
             (int) (
                 network.getVertexes()[tail].getCoordination().getCoordinateX()
-                    * (getWidth() - 40) + 20),
+                    * (getWidth() - PADDING * 2) + PADDING),
             (int) (
                 network.getVertexes()[tail].getCoordination().getCoordinateY()
-                    * (getHeight() - 40) + 20),
+                    * (getHeight() - PADDING * 2) + PADDING),
             (int) (
                 network.getVertexes()[head].getCoordination().getCoordinateX()
-                    * (getWidth() - 40) + 20),
+                    * (getWidth() - PADDING * 2) + PADDING),
             (int) (
                 network.getVertexes()[head].getCoordination().getCoordinateY()
-                    * (getHeight() - 40) + 20)
+                    * (getHeight() - PADDING * 2) + PADDING)
         );
       }
 
       for (Vertex vertex : network.getVertexes()) {
-        g.setColor(Color.GRAY);
-        g.fillOval(
-            (int) (vertex.getCoordination().getCoordinateX() * (getWidth() - 40)) - 7 + 20,
-            (int) (vertex.getCoordination().getCoordinateY() * (getHeight() - 40)) - 7 + 20,
-            14,
-            14
-        );
-
         g.setColor(Color.BLACK);
         g.drawOval(
-            (int) (vertex.getCoordination().getCoordinateX() * (getWidth() - 40)) - 7 + 20,
-            (int) (vertex.getCoordination().getCoordinateY() * (getHeight() - 40)) - 7 + 20,
-            14,
-            14
+            (int) (vertex.getCoordination().getCoordinateX()
+                * (getWidth() - PADDING * 2)) - VERTEX_RADIUS + PADDING,
+            (int) (vertex.getCoordination().getCoordinateY()
+                * (getHeight() - PADDING * 2)) - VERTEX_RADIUS + PADDING,
+            VERTEX_RADIUS * 2,
+            VERTEX_RADIUS * 2
+        );
+
+        int rg = (int) (64 * Math.max(0, 1 - vertex.getRate() * 8));
+        int alpha = 30 + (int) (220 * vertex.getRate());
+
+        g.setColor(new Color(rg, rg, 127, alpha));
+        g.fillOval(
+            (int) (vertex.getCoordination().getCoordinateX()
+                * (getWidth() - PADDING * 2)) - VERTEX_RADIUS + PADDING,
+            (int) (vertex.getCoordination().getCoordinateY()
+                * (getHeight() - PADDING * 2)) - VERTEX_RADIUS + PADDING,
+            VERTEX_RADIUS * 2,
+            VERTEX_RADIUS * 2
         );
       }
     }

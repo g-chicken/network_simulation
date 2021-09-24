@@ -17,7 +17,7 @@ public class Sample {
 
     NetworkDto dto;
     try {
-      dto = createNetworkInterface.undirectedRandom(50, 200);
+      dto = createNetworkInterface.undirectedRandom(20, 100);
     } catch (InvalidArguments e) {
       e.printStackTrace();
 
