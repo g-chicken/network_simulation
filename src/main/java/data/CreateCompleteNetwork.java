@@ -4,7 +4,9 @@ import data.dto.LinkDto;
 import data.dto.NetworkDto;
 import data.dto.VertexDto;
 import java.util.Random;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import utils.StdOutHandler;
 import utils.exceptions.DoNotExecution;
 import utils.exceptions.InvalidArguments;
 import utils.mathematics.Coordination;
@@ -31,6 +33,9 @@ public class CreateCompleteNetwork implements CreateNetworkInterface {
 
     this.vertexNum = vertexNum;
     random = new Random(System.currentTimeMillis());
+    logger.addHandler(new StdOutHandler());
+    logger.setUseParentHandlers(false);
+    logger.setLevel(Level.INFO);
   }
 
   @Override

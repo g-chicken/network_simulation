@@ -4,6 +4,7 @@ import data.CreateCompleteNetwork;
 import data.CreateNetworkInterface;
 import data.CreatePathNetwork;
 import data.CreateRandomNetwork;
+import data.CreateWattsStrogatzNetwork;
 import data.dto.NetworkDto;
 import drawing.Drawing;
 import drawing.DrawingInterface;
@@ -24,9 +25,10 @@ public class Sample {
     NetworkDto dto;
 
     try {
-      createNetworkInterface = new CreateRandomNetwork(20, 100, true);
+      //createNetworkInterface = new CreateRandomNetwork(20, 100, true);
       //createNetworkInterface = new CreateCompleteNetwork(8);
       //createNetworkInterface = new CreatePathNetwork(3);
+      createNetworkInterface = new CreateWattsStrogatzNetwork(12, 4, 0.2);
       dto = createNetworkInterface.createNetwork();
     } catch (InvalidArguments | DoNotExecution e) {
       e.printStackTrace();
